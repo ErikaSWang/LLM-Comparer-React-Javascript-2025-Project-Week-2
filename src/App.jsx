@@ -78,26 +78,29 @@ function App() {
       }
 
       try {
-        const openai = new OpenAI({
-          apiKey: import.meta.env.VITE_OPENAI_KEY,
-          dangerouslyAllowBrowser: true
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              {
+                role: "system",
+                content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!"
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
         });
         
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!"
-            },
-            {
-              role: "user",
-              content: input,
-            }
-          ]
-        });
-        
-        setOutputOpenai(completion.choices[0].message.content);
+        const data = await response.json();
+        setOutputOpenai(data.choices[0].message.content);
       } catch (error) {
         console.error("OpenAI API error:", error);
         setOutputOpenai("Error: Unable to generate response at this time.");
