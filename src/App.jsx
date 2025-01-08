@@ -1,9 +1,96 @@
-import './App.css'
+import React, { useState, useEffect } from "react";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container} from 'react-bootstrap';
+import Nav from './components/Nav';
+import Input from './components/Input.tsx';
+import Feedback from './components/Feedback.tsx';
 
-export default function App() {
+function App() {
+  const [currentInput, setCurrentInput] = useState('');
+  const [input, setInput] = useState(null);
+  const [output, setOutput] = useState(null);
+
+  function handleChange(event) {
+    setCurrentInput(event.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setInput(currentInput);
+  }
+
+  useEffect(() => {
+    async function getFeedback() {
+      if (!input) {
+        return
+      }
+
+      const perplexityKey = import.meta.env.VITE_API_KEY
+
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${perplexityKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: "llama-3.1-sonar-small-128k-online",
+            messages: [
+              {
+                role: "system",
+                content: `You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!`
+              },
+              {
+                role: "user",
+                content: `Input: ${input}`
+              }
+            ],
+            temperature: 0.2,
+            top_p: 0.9,
+            search_domain_filter: ["perplexity.ai"],
+            top_k: 0,
+            stream: false,
+            presence_penalty: 0,
+            frequency_penalty: 1
+          })
+        };
+
+        const response = await fetch('https://api.perplexity.ai/chat/completions', options);
+        const data = await response.json();
+        setOutput(data.choices[0].message.content || "Unable to generate feedback at this time.");
+      } catch (error) {
+        console.error("Perplexity API error:", error);
+        throw error;
+      }
+    }
+    getFeedback();
+  }, [input])
+
+
+
   return (
-    <main>
-      React ⚛️ + Vite ⚡ + Replit
-    </main>
-  )
+    <div className="App">
+      <Container className="container d-flex flex-column align-items-start bg-opacity-10 text-secondary w-80 shadow-lg col-lg-6 col-md-8 col-sm-10 my-3 px-0">
+      
+        <Nav />
+        
+        <Input
+          currentInput={currentInput}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
+        {output ? 
+          <Feedback
+            output={output}
+          />
+          : null
+        }
+        
+      </Container>
+    </div>
+  );
 }
+
+export default App;

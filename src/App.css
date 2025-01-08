@@ -1,2 +1,38 @@
-main {
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  height: 100vh;
+}
+body {
+  background: #cfcfcf !important;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  font-family: 'lucida sans';
+  max-height: 100vh;
+  height: calc(100vh - 3rem);
+  background:hsla(51, 76%, 95%, 0.7);
+  box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
+}
+button {
+  background: linear-gradient(180deg, rgba(235,235,235,1) 0%, rgba(228,228,228,1) 60%, rgba(222,222,222,1) 100%) !important;
+  border: 0.5px solid hsla(52, 38%, 73%, 0.113) !important;
+  box-shadow: 1px 2px 4px 1px hsla(41, 26%, 49%, 0.362) !important;
+}
+button:active {
+  background-color: hsla(46, 18%, 54%, 0.933) !important;
+}
+.textBox {
+  height: auto !important;
+  overflow: visible !important;
+  font-family: Verdana !important;
+  box-shadow: 4px 5px 9px 6px hsla(41, 46%, 56%, 0.123);
+}
+h6 {
+  margin-bottom: 0 !important;
 }
