@@ -78,25 +78,27 @@ function App() {
       }
 
       try {
-        const openai = new OpenAI({
-            apiKey: import.meta.env.VITE_OPENAI_KEY
-        });
-        
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
+        const response = await fetch('/api/openai', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            messages: [
               {
                 role: "system",
                 content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!"
               },
               {
-                  role: "user",
-                  content: input,
-              },
-          ],
+                role: "user",
+                content: input,
+              }
+            ]
+          })
         });
-
-        setOutputOpenai(completion.choices[0].message.content);
+        
+        const data = await response.json();
+        setOutputOpenai(data.message);
       } catch (error) {
         console.error("OpenAI API error:", error);
         setOutputOpenai("Error: Unable to generate response at this time.");
