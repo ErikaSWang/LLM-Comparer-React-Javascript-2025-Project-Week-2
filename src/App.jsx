@@ -90,7 +90,7 @@ function App() {
             },
             {
                 role: "user",
-                content: {input},
+                content: input,
             },
         ],
       });
