@@ -72,7 +72,7 @@ function App() {
       }
     }
     getOutput();
-    
+
   }, [input])
 
   // OPENAI
@@ -106,20 +106,20 @@ function App() {
             ]
           })
         });
-        
+
         const data = await response.json();
         setOutputOpenai(data.choices[0].message.content);
       } catch (error) {
         console.error("OpenAI API error:", error);
         setOutputOpenai("Error: Unable to generate response at this time.");
       }
-      
+
     }
     getOutput();
 
   }, [input])
 
-  
+
   // GEMINI
   useEffect(() => {
     async function getOutput() {
@@ -147,12 +147,12 @@ function App() {
 
         const data = await response.json();
         console.log(data);
-        setOutputGemini(data.result.content);
-        console.log(data.result.content)
-        
+        setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
+        console.log(data.candidates[0].content.parts[0].text)
+
       } catch (error) {
-        console.error("OpenAI API error:", error);
-        setOutputOpenai("Error: Unable to generate response at this time.");
+        console.error("Gemini API error:", error);
+        setOutputGemini("Error: Unable to generate response at this time.");
       }
 
     }
@@ -163,9 +163,9 @@ function App() {
   return (
     <div className="App">
       <Container className="container d-flex flex-column align-items-start bg-opacity-10 text-secondary w-80 shadow-lg col-lg-6 col-md-8 col-sm-10 my-3 px-0">
-      
+
         <Nav />
-        
+
         <Input
           currentInput={currentInput}
           handleChange={handleChange}
@@ -179,7 +179,7 @@ function App() {
           />
           : null
         }
-        
+
       </Container>
     </div>
   );
