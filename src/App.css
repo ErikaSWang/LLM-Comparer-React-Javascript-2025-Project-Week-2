@@ -14,8 +14,8 @@ body {
 }
 .container {
   font-family: 'lucida sans';
-  max-height: 100vh;
-  height: calc(100vh - 3rem);
+  max-height: auto;
+  min-height: calc(100vh - 3rem);
   background:hsla(51, 76%, 95%, 0.7);
   box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
 }
