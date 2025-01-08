@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import OpenAI from "openai";
 import {Container} from 'react-bootstrap';
 import Nav from './components/Nav.tsx';
 import Input from './components/Input.tsx';
@@ -12,6 +11,9 @@ function App() {
   const [input, setInput] = useState(null);
   const [outputPerplexity, setOutputPerplexity] = useState(null);
   const [outputOpenai, setOutputOpenai] = useState(null);
+  const [outputAnthropic, setOutputAnthropic] = useState(null);
+  const [outputX, setOutputX] = useState(null);
+  const [outputGemini, setOutputGemini] = useState(null);
 
   function handleChange(event) {
     setCurrentInput(event.target.value);
@@ -22,6 +24,7 @@ function App() {
     setInput(currentInput);
   }
 
+  // PERPLEXITY
   useEffect(() => {
     async function getOutput() {
       if (!input) {
@@ -29,6 +32,7 @@ function App() {
       }
 
       const perplexityKey = import.meta.env.VITE_PERPLEXITY_KEY
+      // const perplexityKey = process.env.PERPLEXITY_KEY;
 
       try {
         const options = {
@@ -71,11 +75,15 @@ function App() {
     
   }, [input])
 
+  // OPENAI
   useEffect(() => {
     async function getOutput() {
       if (!input) {
         return
       }
+
+      const openaiKey = import.meta.env.VITE_OPENAI_KEY
+      // const openaiKey = process.env.OPENAI_KEY;
 
       try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -106,6 +114,52 @@ function App() {
         setOutputOpenai("Error: Unable to generate response at this time.");
       }
       
+    }
+    getOutput();
+
+  }, [input])
+
+  
+  // GEMINI
+  useEffect(() => {
+    async function getOutput() {
+      if (!input) {
+        return
+      }
+
+      const geminiKey = import.meta.env.VITE_GEMINI_KEY
+      // const geminiKey = process.env.GEMINI_KEY;
+
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "system_instruction": {
+                "parts":
+                  {
+              "text": "You are a cat. Your name is Neko."
+                  }
+                },
+                "contents": [
+                    {"role":"user",
+                     "parts":[{
+                       "text": ""}]
+                }]
+            }
+          })
+        });
+
+        const data = await response.json();
+        setOutputGemini(data.result.content);
+        
+      } catch (error) {
+        console.error("OpenAI API error:", error);
+        setOutputOpenai("Error: Unable to generate response at this time.");
+      }
+
     }
     getOutput();
 

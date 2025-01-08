@@ -20,6 +20,12 @@ export default function Results({outputPerplexity, outputOpenai}) {
             <Card.Text>{outputOpenai}</Card.Text>
           </Card.Body>
         </Card>
+        <Card className="p-3 mx-3 mb-3">
+          <Card.Body>
+            <Card.Title>Gemini</Card.Title>
+            <Card.Text>{outputGemini}</Card.Text>
+          </Card.Body>
+        </Card>
       </>
     );
 }
