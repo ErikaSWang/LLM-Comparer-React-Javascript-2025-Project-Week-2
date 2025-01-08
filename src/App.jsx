@@ -137,16 +137,23 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: "You are a kind, approachable, highly-educated AI assistant who provides wise and helpful responses in maximum 2 sentences. " + input
-              }]
-            }]
+            "system_instruction": {
+                "parts":
+                  {
+              "text": "You are a cat. Your name is Neko."
+                  }
+                },
+                "contents": [
+                    {"role":"user",
+                     "parts":[{
+                       "text": ""}]
+                }]
+            }
           })
         });
 
         const data = await response.json();
-        setOutputGemini(data.candidates[0].content.parts[0].text);
+        setOutputGemini(data.result.content);
         
       } catch (error) {
         console.error("OpenAI API error:", error);
