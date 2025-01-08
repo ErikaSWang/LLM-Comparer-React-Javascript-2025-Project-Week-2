@@ -137,23 +137,18 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "system_instruction": {
-                "parts":
-                  {
-              "text": "You are a cat. Your name is Neko."
-                  }
-                },
-                "contents": [
-                    {"role":"user",
-                     "parts":[{
-                       "text": ""}]
+              "contents": [{
+                "parts":[{
+                  "text": `${input}`
                 }]
-            }
+              }]
           })
         });
 
         const data = await response.json();
+        console.log(data);
         setOutputGemini(data.result.content);
+        console.log(data.result.content)
         
       } catch (error) {
         console.error("OpenAI API error:", error);
@@ -180,6 +175,7 @@ function App() {
           <Results
             outputPerplexity={outputPerplexity}
             outputOpenai={outputOpenai}
+            outputGemini={outputGemini}
           />
           : null
         }

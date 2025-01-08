@@ -2,7 +2,7 @@ import React from 'react';
 import {Card} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 
-export default function Results({outputPerplexity, outputOpenai}) {
+export default function Results({outputPerplexity, outputOpenai, outputGemini}) {
     return (
       <>
         <Form>
