@@ -27,9 +27,6 @@ function App() {
   // PERPLEXITY
   useEffect(() => {
     async function getOutput() {
-      if (!input) {
-        return
-      }
 
       const perplexityKey = import.meta.env.VITE_PERPLEXITY_KEY
       // const perplexityKey = process.env.PERPLEXITY_KEY;
@@ -71,17 +68,17 @@ function App() {
         throw error;
       }
     }
-    getOutput();
+    
+    if (input) {
+      getOutput();
+    }
 
   }, [input])
 
   // OPENAI
   useEffect(() => {
     async function getOutput() {
-      if (!input) {
-        return
-      }
-
+      
       const openaiKey = import.meta.env.VITE_OPENAI_KEY
       // const openaiKey = process.env.OPENAI_KEY;
 
@@ -90,7 +87,7 @@ function App() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_KEY}`
+            'Authorization': `Bearer ${openaiKey}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
@@ -115,17 +112,59 @@ function App() {
       }
 
     }
-    getOutput();
+    
+    if (input) {
+      getOutput();
+    }
 
   }, [input])
+
+  
+  // ANTHROPIC
+  useEffect(() => {
+    if (!input) {
+      return
+    }
+
+    const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
+    // const anthropicKey = process.env.ANTHROPIC_KEY;
+    
+    async function getOutput() {
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': `${anthropicKey}`,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-haiku-20241022',
+            max_tokens: 1024,
+            messages: [{
+              "role": "user",
+              "content": "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!" + input
+            }]
+          })
+        });
+
+        const data = await response.json();
+        setOutputAnthropic(data.content[0].text);
+        
+      } catch (error) {
+        console.error("Error fetching from Anthropic:", error);
+      }
+    }
+
+    if (input) {
+      getOutput();
+    }
+  }, [input]);
 
 
   // GEMINI
   useEffect(() => {
     async function getOutput() {
-      if (!input) {
-        return
-      }
 
       const geminiKey = import.meta.env.VITE_GEMINI_KEY
       // const geminiKey = process.env.GEMINI_KEY;
@@ -148,18 +187,21 @@ function App() {
         const data = await response.json();
         console.log(data);
         setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
-        console.log(data.candidates[0].content.parts[0].text)
-
+        
       } catch (error) {
         console.error("Gemini API error:", error);
         setOutputGemini("Error: Unable to generate response at this time.");
       }
 
     }
-    getOutput();
+    
+    if (input) {
+      getOutput();
+    }
 
   }, [input])
 
+  
   return (
     <div className="App">
       <Container className="container d-flex flex-column align-items-start bg-opacity-10 text-secondary w-80 shadow-lg col-lg-6 col-md-8 col-sm-10 my-3 px-0">
@@ -175,6 +217,7 @@ function App() {
           <Results
             outputPerplexity={outputPerplexity}
             outputOpenai={outputOpenai}
+            outputAnthropic={outputAnthropic}
             outputGemini={outputGemini}
           />
           : null
