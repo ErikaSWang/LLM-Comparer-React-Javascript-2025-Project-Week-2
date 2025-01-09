@@ -20,6 +20,14 @@ body {
   min-height: calc(100vh - 3rem);
   background:hsla(51, 76%, 95%, 0.7);
   box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
+  transition: all 1.5s ease-in-out;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container.shifted {
+  width: 45% !important;
+  margin-left: 2rem !important;
 }
 button {
   background: linear-gradient(180deg, rgba(235,235,235,1) 0%, rgba(228,228,228,1) 60%, rgba(222,222,222,1) 100%) !important;

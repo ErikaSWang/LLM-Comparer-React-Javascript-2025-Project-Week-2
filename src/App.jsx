@@ -23,6 +23,7 @@ function App() {
   function handleSubmit(e) {
     e.preventDefault();
     setInput(currentInput);
+    document.querySelector('.container').classList.add('shifted');
   }
 
   // PERPLEXITY
