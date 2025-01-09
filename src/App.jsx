@@ -46,7 +46,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: `You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!`
+                content: `You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!+`
               },
               {
                 role: "user",
@@ -90,14 +90,14 @@ function App() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_KEY}`
+            'Authorization': `Bearer ${openaiKey}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
             messages: [
               {
                 role: "system",
-                content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!"
+                content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!"
               },
               {
                 role: "user",
@@ -112,6 +112,51 @@ function App() {
       } catch (error) {
         console.error("OpenAI API error:", error);
         setOutputOpenai("Error: Unable to generate response at this time.");
+      }
+
+    }
+    getOutput();
+
+  }, [input])
+
+
+  // ANTHROPIC
+  useEffect(() => {
+    async function getOutput() {
+      if (!input) {
+        return
+      }
+
+      const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
+      // const anthropicKey = process.env.ANTHROPIC_KEY;
+
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': `${anthropicKey}`,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: "claude-3-haiku-20240307",
+            max_tokens: 1024,
+            messages: [
+                {
+                  role: 'user',
+                  content: input
+                }
+            ]
+
+          })
+        });
+
+        const data = await response.json();
+        setOutputAnthropic(data.content.text);
+        
+      } catch (error) {
+        console.error("Anthropic API error:", error);
+        setOutputAnthropic("Error: Unable to generate response at this time.");
       }
 
     }
@@ -139,7 +184,7 @@ function App() {
           body: JSON.stringify({
             contents: [{
               parts:[{
-                text: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences! " + input
+                text: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!" + input
               }]
             }]
           })
@@ -148,7 +193,6 @@ function App() {
         const data = await response.json();
         console.log(data);
         setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
-        console.log(data.candidates[0].content.parts[0].text)
 
       } catch (error) {
         console.error("Gemini API error:", error);
@@ -175,6 +219,7 @@ function App() {
           <Results
             outputPerplexity={outputPerplexity}
             outputOpenai={outputOpenai}
+            outputAnthropic={outputAnthropic}
             outputGemini={outputGemini}
           />
           : null
