@@ -143,8 +143,9 @@ function App() {
             max_tokens: 1024,
             messages: [{
               role: "user",
-              content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!" + input
-            }]
+              content: input
+            }],
+            system: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!"
           })
         });
 
