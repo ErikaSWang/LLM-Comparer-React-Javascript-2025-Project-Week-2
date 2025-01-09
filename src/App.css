@@ -5,12 +5,14 @@
 }
 html {
   height: 100vh;
-}
-body {
-  background: #cfcfcf !important;
-  height: 100vh;
   margin: 0;
   padding: 0;
+}
+  
+body {
+      background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 }
 .container {
   font-family: 'lucida sans';
@@ -31,7 +33,9 @@ button:active {
   height: auto !important;
   overflow: visible !important;
   font-family: Verdana !important;
-  box-shadow: 4px 5px 9px 6px hsla(41, 46%, 56%, 0.123);
+  background: #ece8df !important;
+  margin-bottom: 0.5rem solid #ede8de;
+  box-shadow: 4px 5px 9px 6px hsla(41, 46%, 56%, 0.111);
 }
 h6 {
   margin-bottom: 0 !important;

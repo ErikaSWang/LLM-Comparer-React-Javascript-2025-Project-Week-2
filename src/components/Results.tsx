@@ -2,7 +2,7 @@ import React from 'react';
 import {Card} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 
-export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini}) {
+export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini, outputX}) {
     return (
       <>
         <Form>
@@ -29,6 +29,12 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
         <Card className="p-3 mx-3 mb-3">
           <Card.Body>
             <Card.Title>Google Gemini-1.5-Flash</Card.Title>
+            <Card.Text>{outputGemini}</Card.Text>
+          </Card.Body>
+        </Card>
+        <Card className="p-3 mx-3 mb-3">
+          <Card.Body>
+            <Card.Title>X Grok-2-1212</Card.Title>
             <Card.Text>{outputGemini}</Card.Text>
           </Card.Body>
         </Card>
