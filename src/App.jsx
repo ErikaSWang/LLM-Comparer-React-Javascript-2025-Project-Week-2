@@ -244,7 +244,7 @@ function App() {
   
   return (
     <div className="App">
-      <Container className="container d-flex flex-column align-items-start bg-opacity-10 text-secondary w-80 shadow-lg col-lg-6 col-md-8 col-sm-10 my-3 px-0">
+      <div className="custom-container d-flex flex-column align-items-start text-secondary my-3">
 
         <Nav />
 

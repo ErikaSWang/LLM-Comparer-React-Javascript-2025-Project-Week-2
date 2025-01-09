@@ -14,20 +14,25 @@ body {
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
-.container {
+.custom-container {
   font-family: 'lucida sans';
+  width: 50%;
   max-height: auto;
   min-height: calc(100vh - 3rem);
-  background:hsla(51, 76%, 95%, 0.7);
+  background: hsla(51, 76%, 95%, 0.7);
   box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
-  transition: all 1.5s ease-in-out;
-  margin-left: auto;
-  margin-right: auto;
+  transition: all 1.5s ease;
+  margin: 0 auto;
 }
 
-.container.shifted {
-  width: 45% !important;
-  margin-left: 2rem !important;
+.custom-container.shifted {
+  width: 45%;
+  margin-left: 2rem;
+}
+
+.form-control:focus {
+  border-color: #ece8df !important;
+  box-shadow: 0 0 0 0.2rem rgba(236, 232, 223, 0.25) !important;
 }
 button {
   background: linear-gradient(180deg, rgba(235,235,235,1) 0%, rgba(228,228,228,1) 60%, rgba(222,222,222,1) 100%) !important;
