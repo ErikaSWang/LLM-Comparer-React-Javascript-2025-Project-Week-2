@@ -42,7 +42,6 @@ button:active {
   overflow: visible !important;
   font-family: Verdana !important;
   background: #ece8df !important;
-  margin-bottom: 0.5rem solid #ede8de;
   box-shadow: 4px 5px 9px 6px hsla(41, 46%, 56%, 0.111);
 }
 h6 {
