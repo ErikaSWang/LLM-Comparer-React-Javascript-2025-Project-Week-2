@@ -135,15 +135,15 @@ function App() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': `${anthropicKey}`,
+            'x-api-key': anthropicKey,
             'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
-            model: 'claude-3-5-haiku-20241022',
+            model: 'claude-3-haiku-20240307',
             max_tokens: 1024,
             messages: [{
-              "role": "user",
-              "content": "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!" + input
+              role: "user",
+              content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences! " + input
             }]
           })
         });
