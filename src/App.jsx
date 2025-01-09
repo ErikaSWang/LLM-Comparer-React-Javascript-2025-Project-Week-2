@@ -137,11 +137,11 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              "contents": [{
-                "parts":[{
-                  "text": `${input}`
-                }]
+            contents: [{
+              parts:[{
+                text: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences! " + input
               }]
+            }]
           })
         });
 
