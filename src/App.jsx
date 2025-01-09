@@ -263,8 +263,7 @@ function App() {
           />
           : null
         }
-
-      </Container>
+      </div>
     </div>
   );
 }
