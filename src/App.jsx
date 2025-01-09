@@ -43,7 +43,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: `You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!`
+                content: `You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!`
               },
               {
                 role: "user",
@@ -94,7 +94,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences!"
+                content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!"
               },
               {
                 role: "user",
@@ -143,7 +143,7 @@ function App() {
             max_tokens: 1024,
             messages: [{
               role: "user",
-              content: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences! " + input
+              content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!" + input
             }]
           })
         });
@@ -178,14 +178,14 @@ function App() {
           body: JSON.stringify({
             contents: [{
               parts:[{
-                text: "You are a kind, approachable, socially-savvy, highly-educated, and gifted AI assistant who prides themselves on providing wise, thoughtful/insightful, and helpful responses in a maximum of 2 sentences. Please be concise and limit your responses to no more than 2 sentences! " + input
+                text: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!" + input
               }]
             }]
           })
         });
 
         const data = await response.json();
-        console.log(data);
+
         setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
         
       } catch (error) {
