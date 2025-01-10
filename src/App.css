@@ -4,19 +4,28 @@
   padding: 0;
 }
 html {
-  height: 100vh;
+  height: auto;
   margin: 0;
   padding: 0;
 }
-  
 body {
-      background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
+  background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
-.custom-container {
-  font-family: 'lucida sans';
-  width: 50%;
+.outer {
+
+}
+nav {
+  font-family: "Encode Sans Semi Condensed", serif;
+  font-weight: 500;
+  font-style: normal;
+  border-color: transparent !important;
+}
+.navbar-brand {
+  color: #b89d4c !important;
+}
+.container {
   max-height: auto;
   min-height: calc(100vh - 3rem);
   background: hsla(51, 76%, 95%, 0.7);
@@ -25,15 +34,10 @@ body {
   margin: 0 auto;
 }
 
-.custom-container.shifted {
-  width: 45%;
-  margin-left: 2rem;
-}
-
 .form-control:focus {
-  border-color: #ece8df !important;
-  border: 2px solid #e8e6de !important;
-  box-shadow: 4px 5px 9px 6px rgb(224, 215, 194, 0.25) !important;
+  border-color: #eae8e1 !important;
+  border: 2px solid #eae8e1 !important;
+  box-shadow: 4px 5px 9px 6px rgb(223, 215, 195, 0.12) !important;
 }
 button {
   background: linear-gradient(180deg, rgba(235,235,235,1) 0%, rgba(228,228,228,1) 60%, rgba(222,222,222,1) 100%) !important;
@@ -46,10 +50,32 @@ button:active {
 .textBox {
   height: auto !important;
   overflow: visible !important;
-  font-family: Verdana !important;
-  background: #ece8df !important;
-  box-shadow: 4px 5px 9px 6px rgb(224, 215, 194, 0.25) !important;
+  color: #d6d4cd !important;
+  font-family: "Manrope", serif !important;
+  font-optical-sizing: auto;
+  font-weight: 325;
+  font-style: normal;
+  font-size: 0.9rem;
+  background: linear-gradient(180deg, rgba(248,246,244,1) 0%, rgba(246,243,240,1) 44%, rgba(244,242,238,1) 90%, rgba(244,242,240,1) 100%) !important;
+  box-shadow: 4px 5px 9px 6px rgb(224, 217, 199, 0.12) !important;
+  box-shadow: inset 2px 3px 5px 2px rgb(238, 233, 221, 0.15);
+  border: 0.5px solid #f1efe9 !important;
 }
 h6 {
   margin-bottom: 0 !important;
+  font-family: "Noto Sans JP", serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  font-style: normal;
+}
+.title {
+  font-family: "Sofia Sans Condensed", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 1.5rem !important;
+  font-style: normal;
+}
+.text {
+  line-height: 1.4rem !important;
+  border: 0.5px solid #f7f6f2 !important;
 }

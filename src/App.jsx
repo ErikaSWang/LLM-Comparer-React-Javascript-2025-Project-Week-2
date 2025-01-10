@@ -8,6 +8,8 @@ import Results from './components/Results.tsx';
 import Anthropic from '@anthropic-ai/sdk';
 
 function App() {
+  const [currentIdentity, setCurrentIdentity] = useState('');
+  const [identity, setIdentity] = useState('');
   const [currentInput, setCurrentInput] = useState('');
   const [input, setInput] = useState(null);
   const [outputPerplexity, setOutputPerplexity] = useState(null);
@@ -17,13 +19,19 @@ function App() {
   const [outputGemini, setOutputGemini] = useState(null);
 
   function handleChange(event) {
-    setCurrentInput(event.target.value);
+    setCurrentIdentity(event.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (currentIdentity) {
+      setIdentity(currentIdentity);
+    }
     setInput(currentInput);
-    document.querySelector('.container').classList.add('shifted');
+  }
+
+  function handleChange2(event) {
+    setCurrentInput(event.target.value);
   }
 
   // PERPLEXITY
@@ -32,6 +40,13 @@ function App() {
 
       const perplexityKey = import.meta.env.VITE_PERPLEXITY_KEY
       // const perplexityKey = process.env.PERPLEXITY_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+      }
 
       try {
         const options = {
@@ -45,7 +60,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: `You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!`
+                content: personality
               },
               {
                 role: "user",
@@ -84,6 +99,13 @@ function App() {
       const openaiKey = import.meta.env.VITE_OPENAI_KEY
       // const openaiKey = process.env.OPENAI_KEY;
 
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+      }
+
       try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
@@ -96,7 +118,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!"
+                content: personality
               },
               {
                 role: "user",
@@ -133,12 +155,19 @@ function App() {
         apiKey: anthropicKey,
         dangerouslyAllowBrowser: true
       });
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+      }
       
       try {
         const msg = await anthropic.messages.create({
           model: "claude-3-haiku-20240307",
           max_tokens: 1024,
-          system: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!",
+          system: personality,
           messages: [{ role: "user", content: input }],
         });
         
@@ -163,6 +192,13 @@ function App() {
       const geminiKey = import.meta.env.VITE_GEMINI_KEY
       // const geminiKey = process.env.GEMINI_KEY;
 
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+      }
+
       try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
           method: 'POST',
@@ -172,7 +208,7 @@ function App() {
           body: JSON.stringify({
             contents: [{
               parts:[{
-                text: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!" + input
+                text: `${personality} ${input}`
               }]
             }]
           })
@@ -202,6 +238,13 @@ function App() {
       const xKey = import.meta.env.VITE_X_KEY
       // const xKey = process.env.X_KEY;
 
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+      }
+
       try {
         const response = await fetch('https://api.x.ai/v1/chat/completions', {
           method: 'POST',
@@ -214,7 +257,7 @@ function App() {
             messages: [
               {
                 role: "system",
-                content: "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please be concise and limit your responses to no more than 2 sentences!"
+                content: personality
               },
               {
                 role: "user",
@@ -227,10 +270,10 @@ function App() {
         });
 
         const data = await response.json();
-        setOutputOpenai(data.choices[0].message.content);
+        setOutputX(data.choices[0].message.content);
       } catch (error) {
         console.error("OpenAI API error:", error);
-        setOutputOpenai("Error: Unable to generate response at this time.");
+        setOutputX("Error: Unable to generate response at this time.");
       }
 
     }
@@ -244,16 +287,20 @@ function App() {
   
   return (
     <div className="App">
-      <div className="custom-container d-flex flex-column align-items-start text-secondary my-3">
-
-        <Nav />
-
-        <Input
-          currentInput={currentInput}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-        />
-        { (outputPerplexity || outputOpenai) ? 
+      <Container className="d-flex w-100 outer">
+        <Container className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input !== '' ? 'col-lg-3' : 'col-lg-6'}`}>
+            <Nav />
+    
+            <Input
+              currentIdentity={currentIdentity}
+              handleChange={handleChange}
+              currentInput={currentInput}
+              handleChange2={handleChange2}
+              handleSubmit={handleSubmit}
+            />
+  
+        </Container>
+        { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputX) ? 
           <Results
             outputPerplexity={outputPerplexity}
             outputOpenai={outputOpenai}
@@ -263,7 +310,8 @@ function App() {
           />
           : null
         }
-      </div>
+      </Container>
+      
     </div>
   );
 }
