@@ -287,7 +287,7 @@ function App() {
   
   return (
     <div className="App">
-      <Container className={`d-flex w-100 outer ${input ? 'has-input' : ''}`}>
+      <Container className="d-flex w-100 outer">
         <Container className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input !== '' ? 'col-lg-3' : 'col-lg-6'}`}>
             <Nav />
     
