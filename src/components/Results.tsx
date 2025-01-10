@@ -6,7 +6,7 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
     return (
       <>
         <Form>
-          <h6><Form.Label className="px-3">Output from AI</Form.Label></h6>
+          <h6><Form.Label className="px-3"></Form.Label></h6>
         </Form>
         <Card className="p-1 mb-3">
           <Card.Body>

@@ -79,3 +79,9 @@ h6 {
   line-height: 1.4rem !important;
   border: 0.5px solid #f7f6f2 !important;
 }
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 98% !important;;
+    }
+}
