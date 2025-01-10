@@ -45,7 +45,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
       }
 
       try {
@@ -103,7 +103,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
       }
 
       try {
@@ -160,12 +160,12 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
       }
       
       try {
         const msg = await anthropic.messages.create({
-          model: "claude-3-haiku-20240307",
+          model: "claude-3-5-haiku-latest",
           max_tokens: 1024,
           system: personality,
           messages: [{ role: "user", content: input }],
@@ -196,11 +196,11 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${geminiKey}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses. Please limit your response to 2-3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
       }
 
       try {
@@ -287,7 +287,7 @@ function App() {
   
   return (
     <div className="App">
-      <Container className="d-flex w-100 outer">
+      <Container className="d-flex w-100 outer my-3">
         <Container className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input ? 'col-lg-3' : 'col-lg-6'}`}>
             <Nav />
     
@@ -297,6 +297,7 @@ function App() {
               currentInput={currentInput}
               handleChange2={handleChange2}
               handleSubmit={handleSubmit}
+              input={input}
             />
   
         </Container>

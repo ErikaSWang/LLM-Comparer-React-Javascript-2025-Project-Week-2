@@ -5,36 +5,44 @@ import {Form} from 'react-bootstrap';
 export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini, outputX}) {
     return (
       <>
-        <Form>
-          <h6><Form.Label className="px-3"></Form.Label></h6>
-        </Form>
-        <Card className="p-1 mb-3">
+        <Form className="p-2"></Form>
+        <Card className="width p-1 mb-3">
           <Card.Body>
-            <Card.Title className="title">Perplexity Llama-3.1-Sonar</Card.Title>
+            <Card.Title className="title">Perplexity</Card.Title>
+            <Card.Subtitle className="text-secondary">Llama-3.1-Sonar</Card.Subtitle>
+            <Card.Subtitle className="text-secondary mb-3">($0.20/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{outputPerplexity}</Card.Text>
           </Card.Body>
         </Card>
-        <Card className="p-1 mb-3">
+        <Card className="width p-1 mb-3">
           <Card.Body>
-            <Card.Title className="title">OpenAi Gpt-4o</Card.Title>
+            <Card.Title className="title">OpenAI</Card.Title>
+            <Card.Subtitle className="text-secondary">Gpt-4o</Card.Subtitle>
+            <Card.Subtitle className="text-secondary mb-3">($0.15/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{outputOpenai}</Card.Text>
           </Card.Body>
         </Card>
-        <Card className="p-1 mb-3">
+        <Card className="width p-1 mb-3">
           <Card.Body>
-            <Card.Title className="title">Anthropic Claude-3-Haiku</Card.Title>
+            <Card.Title className="title">Anthropic</Card.Title>
+            <Card.Subtitle className="text-secondary">Claude-3-Haiku</Card.Subtitle>
+            <Card.Subtitle className="text-secondary mb-3">($0.80/MTok)</Card.Subtitle>
             <Card.Text className="text">{outputAnthropic}</Card.Text>
           </Card.Body>
         </Card>
-        <Card className="p-1 mb-3">
+        <Card className="width p-1 mb-3">
           <Card.Body>
-            <Card.Title className="title">Google Gemini-1.5-Flash</Card.Title>
+            <Card.Title className="title">Google</Card.Title>
+            <Card.Subtitle className="text-secondary">Gemini-1.5-Pro</Card.Subtitle>
+            <Card.Subtitle className="text-secondary mb-3">(free)</Card.Subtitle>
             <Card.Text className="text">{outputGemini}</Card.Text>
           </Card.Body>
         </Card>
-        <Card className="p-1 mb-3">
+        <Card className="width p-1 mb-3">
           <Card.Body>
-            <Card.Title className="title">X Grok-2-1212</Card.Title>
+            <Card.Title className="title">X</Card.Title>
+            <Card.Subtitle className="text-secondary">Grok-2-1212</Card.Subtitle>
+            <Card.Subtitle className="text-secondary mb-3">($2/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{outputX}</Card.Text>
           </Card.Body>
         </Card>

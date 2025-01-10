@@ -4,7 +4,7 @@
   padding: 0;
 }
 html {
-  height: auto;
+  height: 100vh;
   margin: 0;
   padding: 0;
 }
@@ -14,7 +14,13 @@ body {
   background-size: cover !important;
 }
 .outer {
-
+  min-height: calc(100vh - 2rem);
+}
+.container {
+  height: calc(100vh-3em) !important;
+  background: hsla(51, 76%, 95%, 0.7);
+  box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
+  transition: all 1.5s ease;
 }
 nav {
   font-family: "Encode Sans Semi Condensed", serif;
@@ -24,15 +30,9 @@ nav {
 }
 .navbar-brand {
   color: #b89d4c !important;
+  font-size: 1.75rem !important;
 }
-.container {
-  max-height: auto;
-  min-height: calc(100vh - 3rem);
-  background: hsla(51, 76%, 95%, 0.7);
-  box-shadow: 2px 9px 12px 5px hsla(41, 74%, 35%, 0.123);
-  transition: all 1.5s ease;
-  margin: 0 auto;
-}
+
 
 .form-control:focus {
   border-color: #eae8e1 !important;
@@ -50,22 +50,30 @@ button:active {
 .textBox {
   height: auto !important;
   overflow: visible !important;
-  color: #d6d4cd !important;
+  color: #615e51 !important;
   font-family: "Manrope", serif !important;
   font-optical-sizing: auto;
   font-weight: 325;
   font-style: normal;
   font-size: 0.9rem;
-  background: linear-gradient(180deg, rgba(248,246,244,1) 0%, rgba(246,243,240,1) 44%, rgba(244,242,238,1) 90%, rgba(244,242,240,1) 100%) !important;
   box-shadow: 4px 5px 9px 6px rgb(224, 217, 199, 0.12) !important;
   box-shadow: inset 2px 3px 5px 2px rgb(238, 233, 221, 0.15);
   border: 0.5px solid #f1efe9 !important;
+}
+.before {
+  background: #fff !important;
+}
+.after {
+  background: #fbfbf9 !important;
+}
+.text-after {
+  color: #70706b !important;
 }
 h6 {
   margin-bottom: 0 !important;
   font-family: "Noto Sans JP", serif;
   font-weight: 400;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-style: normal;
 }
 .title {
@@ -78,6 +86,9 @@ h6 {
 .text {
   line-height: 1.4rem !important;
   border: 0.5px solid #f7f6f2 !important;
+}
+.width {
+  width: 15vw !important;
 }
 
 @media (min-width: 992px) {
