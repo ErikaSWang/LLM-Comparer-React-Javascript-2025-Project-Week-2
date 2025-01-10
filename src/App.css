@@ -14,8 +14,15 @@ body {
   background-size: cover !important;
 }
 .outer {
-
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
 }
+
+.outer.has-input {
+  padding: 0 1rem !important;
+}
+
 nav {
   font-family: "Encode Sans Semi Condensed", serif;
   font-weight: 500;
