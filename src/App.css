@@ -9,9 +9,10 @@ html {
   padding: 0;
 }
 body {
-  min-height: 100vh;
-  margin: 0;
-  background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) fixed;
+  background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  height: auto !important;
 }
 .outer {
   min-height: calc(100vh - 2rem);
