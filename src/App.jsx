@@ -82,14 +82,13 @@ function App() {
                 content: `Input: ${input}`
               }
             ],
-            temperature: 0.1,
-            max_tokens: 100,
+            temperature: 0.2,
             top_p: 0.9,
             search_domain_filter: ["perplexity.ai"],
             top_k: 0,
             stream: false,
-            presence_penalty: 0.6,
-            frequency_penalty: 1.5
+            presence_penalty: 0,
+            frequency_penalty: 1
           })
         };
 
