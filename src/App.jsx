@@ -19,6 +19,20 @@ function App() {
   const [outputGemini, setOutputGemini] = useState(null);
   const [responsive, setResponsive] = useState(false);
 
+  const checkResponsive = () => {
+    const width = window.innerWidth;
+    setResponsive(width <= 1024); // iPad and smaller devices
+  };
+
+  useEffect(() => {
+    checkResponsive(); // Check on initial load
+    window.addEventListener('resize', checkResponsive);
+    
+    return () => {
+      window.removeEventListener('resize', checkResponsive);
+    };
+  }, []);
+
   function handleChange(event) {
     setCurrentIdentity(event.target.value);
   }
