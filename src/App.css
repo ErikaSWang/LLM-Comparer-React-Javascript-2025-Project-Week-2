@@ -97,6 +97,9 @@ h6 {
   font-weight: 350;
   font-style: normal;
 }
+.special-width {
+  width: 22% !important;
+}
 
 @media (min-width: 100px) {
   .width {

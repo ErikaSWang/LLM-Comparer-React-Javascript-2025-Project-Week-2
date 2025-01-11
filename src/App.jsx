@@ -302,8 +302,8 @@ function App() {
   
   return (
     <div className="App">
-      <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : ''}`}>
-        <Container className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input ? 'col-lg-3' : 'col-lg-6'}`}>
+      <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : 'justify-content-start'}`}>
+        <div className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input && responsive === false ? 'special-width' : 'col-lg-6'}`}>
             <Nav />
     
             <Input
@@ -315,7 +315,7 @@ function App() {
               input={input}
             />
   
-        </Container>
+        </div>
         { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputX) ? 
           <Results
             outputPerplexity={outputPerplexity}
