@@ -35,10 +35,12 @@ function App() {
 
   useEffect(() => {
     if (input) {
-      window.scrollTo({
-        top: window.innerHeight * 0.4,
-        behavior: 'smooth'
-      });
+      setTimeout(() => {
+        window.scrollTo({
+          top: window.innerHeight * 0.7,
+          behavior: 'smooth'
+        });
+      }, 100);
     }
   }, [input]);
 
