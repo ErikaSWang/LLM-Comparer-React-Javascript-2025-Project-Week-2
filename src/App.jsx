@@ -33,6 +33,15 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (input) {
+      window.scrollTo({
+        top: window.innerHeight * 0.6,
+        behavior: 'smooth'
+      });
+    }
+  }, [input]);
+
   function handleChange(event) {
     setCurrentIdentity(event.target.value);
   }
