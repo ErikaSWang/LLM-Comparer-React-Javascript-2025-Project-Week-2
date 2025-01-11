@@ -28,11 +28,11 @@ const formatResponse = (text: string) => {
   }
   
   // Handle regular paragraphs
-  const paragraphs = text.split(/\n\n|\.\s+(?=[A-Z])/);
-  return paragraphs.map((para, index) => (
+  const sentences = text.split(/(?<=\.)\s+(?=[A-Z])/);
+  return sentences.map((sentence, index) => (
     <React.Fragment key={index}>
-      {para.trim() + (para.trim().endsWith('.') ? '' : '.')}
-      {index < paragraphs.length - 1 && <><br /><br /></>}
+      {sentence.trim() + (sentence.trim().endsWith('.') ? '' : '.')}
+      {index < sentences.length - 1 && <><br /><br /></>}
     </React.Fragment>
   ));
 };
