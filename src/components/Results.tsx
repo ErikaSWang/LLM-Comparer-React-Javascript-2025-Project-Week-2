@@ -5,13 +5,27 @@ import {Form} from 'react-bootstrap';
 
 const formatResponse = (text: string) => {
   if (!text) return '';
-  // Split on period followed by space, keeping the period
+  
+  // Check if it's a numbered list (contains number followed by period)
+  if (text.match(/\d+\./)) {
+    const items = text.split(/\d+\./).filter(item => item.trim());
+    // Take only numbered items (skip introductory paragraphs)
+    const numberedItems = items.slice(-3);
+    
+    return numberedItems.map((item, index) => (
+      <React.Fragment key={index}>
+        {`${index + 1}. ${item.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}`}
+        {index < numberedItems.length - 1 && <><br /><br /></>}
+      </React.Fragment>
+    ));
+  }
+  
+  // Regular response formatting with bold text support
   const sentences = text.match(/[^.!?]+[.!?]+\s*/g) || [text];
-  // Limit to 3 sentences
   const limitedSentences = sentences.slice(0, 3);
   return limitedSentences.map((sentence, index) => (
     <React.Fragment key={index}>
-      {sentence.trim()}
+      {sentence.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}
       {index < limitedSentences.length - 1 && <><br /><br /></>}
     </React.Fragment>
   ));
