@@ -19,9 +19,7 @@ function App() {
   const [outputGemini, setOutputGemini] = useState(null);
   const [responsive, setResponsive] = useState(false);
 
-
   
-
   useEffect(() => {
     const checkResponsive = () => {
       const width = window.innerWidth;
