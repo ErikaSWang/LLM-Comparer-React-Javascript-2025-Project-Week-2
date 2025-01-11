@@ -303,9 +303,9 @@ function App() {
 
   useEffect(() => {
     const app = document.querySelector('.App');
-    if (responsive === true && input && !app.hasClass('scrolled')) {
+    if (responsive === true && input && !app.classList.contains('scrolled')) {
       app.classList.add('scrolled');
-    } else if (responsive === false && app.hasClass('scrolled')) {
+    } else if (responsive === false && app.classList.contains('scrolled')) {
       app.classList.remove('scrolled');
     }
   }, [input]);
