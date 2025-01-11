@@ -10,7 +10,7 @@ const formatResponse = (text: string) => {
   if (text.match(/\d+\./)) {
     const segments = text.split(/(?=\d+\.)/);
     const intro = segments[0].trim();
-    const items = segments.slice(1);
+    const items = segments.slice(1, 4); // Limit to 3 items
     
     return (
       <>
