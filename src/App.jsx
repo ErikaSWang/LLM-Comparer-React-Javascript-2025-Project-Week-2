@@ -19,15 +19,18 @@ function App() {
   const [outputGemini, setOutputGemini] = useState(null);
   const [responsive, setResponsive] = useState(false);
 
-  const checkResponsive = () => {
-    const width = window.innerWidth;
-    setResponsive(width <= 991); // iPad and smaller devices
-  };
+
+  
 
   useEffect(() => {
+    const checkResponsive = () => {
+      const width = window.innerWidth;
+      setResponsive(width <= 991); // iPad and smaller devices
+    };
+    
     checkResponsive(); // Check on initial load
     window.addEventListener('resize', checkResponsive);
-    
+
     return () => {
       window.removeEventListener('resize', checkResponsive);
     };
@@ -299,16 +302,6 @@ function App() {
     }
 
   }, [input])
-
-
-  useEffect(() => {
-    const app = document.querySelector('.App');
-    if (responsive === true && input && !app.classList.contains('scrolled')) {
-      app.classList.add('scrolled');
-    } else if (responsive === false && app.classList.contains('scrolled')) {
-      app.classList.remove('scrolled');
-    }
-  }, [input]);
 
 
   

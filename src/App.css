@@ -134,19 +134,14 @@ h6 {
 
 @media (min-width: 100px) {
   .width {
-    width: auto !important;
+    width: 100% !important;
   }
-  .App {
-    transition: transform 0.5s ease-in-out;
-  }
-  .App.scrolled {
-    transform: translateY(-40vh);
-  }
+
 }
 
 @media (min-width: 992px) {
     .container {
-        max-width: 98% !important;;
+      max-width: 98% !important;
     }
     .width {
       width: 15vw !important;
