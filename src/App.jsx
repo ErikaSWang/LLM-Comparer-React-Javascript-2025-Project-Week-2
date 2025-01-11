@@ -21,7 +21,7 @@ function App() {
 
   const checkResponsive = () => {
     const width = window.innerWidth;
-    setResponsive(width <= 1024); // iPad and smaller devices
+    setResponsive(width <= 991); // iPad and smaller devices
   };
 
   useEffect(() => {
@@ -302,7 +302,7 @@ function App() {
   
   return (
     <div className="App">
-      <Container className="d-flex w-100 outer my-3">
+      <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : ''}`}>
         <Container className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input ? 'col-lg-3' : 'col-lg-6'}`}>
             <Nav />
     
@@ -323,6 +323,7 @@ function App() {
             outputAnthropic={outputAnthropic}
             outputGemini={outputGemini}
             outputX={outputX}
+            responsive={responsive}
           />
           : null
         }

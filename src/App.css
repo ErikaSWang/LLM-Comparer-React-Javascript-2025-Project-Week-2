@@ -97,12 +97,18 @@ h6 {
   font-weight: 350;
   font-style: normal;
 }
-.width {
-  width: 15vw !important;
+
+@media (min-width: 100px) {
+  .width {
+    width: auto !important;
+  }
 }
 
 @media (min-width: 992px) {
     .container {
         max-width: 98% !important;;
+    }
+    .width {
+      width: 15vw !important;
     }
 }
