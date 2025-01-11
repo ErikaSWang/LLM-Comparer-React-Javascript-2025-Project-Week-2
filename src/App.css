@@ -100,17 +100,17 @@ h6 {
 .special-width {
   width: 22% !important;
 }
-.scroll{
+body {
   overflow-y: scroll;
   overflow-x: hidden;
-} 
-.scroll::-webkit-scrollbar {
+}
+body::-webkit-scrollbar {
   width: 10px;               /* width of the entire scrollbar */
 }
-.scroll::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
   background: #f1eee9;        /* color of the tracking area */
 }
-.scroll::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: #d2d1cb;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
   border: 2px solid #e0dbd1;  /* creates padding around scroll thumb */
