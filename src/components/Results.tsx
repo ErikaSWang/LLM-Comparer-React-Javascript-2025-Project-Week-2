@@ -6,27 +6,31 @@ import {Form} from 'react-bootstrap';
 const formatResponse = (text: string) => {
   if (!text) return '';
   
-  // Check if it's a numbered list (contains number followed by period)
+  // Handle numbered lists
   if (text.match(/\d+\./)) {
-    const items = text.split(/\d+\./).filter(item => item.trim());
-    // Take only numbered items (skip introductory paragraphs)
-    const numberedItems = items.slice(-3);
+    const segments = text.split(/(?=\d+\.)/);
+    const intro = segments[0].trim();
+    const items = segments.slice(1);
     
-    return numberedItems.map((item, index) => (
-      <React.Fragment key={index}>
-        {`${index + 1}. ${item.trim().replace(/:\s*-\s*/g, ': ')}`}
-        {index < numberedItems.length - 1 && <><br /><br /></>}
-      </React.Fragment>
-    ));
+    return (
+      <>
+        {intro && <>{intro}<br /><br /></>}
+        {items.map((item, index) => (
+          <React.Fragment key={index}>
+            {item.trim()}
+            {index < items.length - 1 && <><br /><br /></>}
+          </React.Fragment>
+        ))}
+      </>
+    );
   }
   
-  // Regular response formatting with bold text support
-  const sentences = text.match(/[^.!?]+[.!?]+\s*/g) || [text];
-  const limitedSentences = sentences.slice(0, 3);
-  return limitedSentences.map((sentence, index) => (
+  // Handle regular paragraphs
+  const paragraphs = text.split(/\n\n|\.\s+(?=[A-Z])/);
+  return paragraphs.map((para, index) => (
     <React.Fragment key={index}>
-      {sentence.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}
-      {index < limitedSentences.length - 1 && <><br /><br /></>}
+      {para.trim() + (para.trim().endsWith('.') ? '' : '.')}
+      {index < paragraphs.length - 1 && <><br /><br /></>}
     </React.Fragment>
   ));
 };
