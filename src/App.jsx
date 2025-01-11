@@ -302,12 +302,13 @@ function App() {
 
 
   useEffect(() => {
-    if (responsive === true && input) {
-      document.querySelector('.App').classList.add('scrolled');
-    } else {
-      document.querySelector('.App').classList.remove('scrolled');
+    const app = document.querySelector('.App');
+    if (responsive === true && input && !app.hasClass('scrolled')) {
+      app.classList.add('scrolled');
+    } else if (responsive === false && app.hasClass('scrolled')) {
+      app.classList.remove('scrolled');
     }
-  }, [input, responsive]);
+  }, [input]);
 
 
   
