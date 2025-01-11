@@ -36,7 +36,7 @@ function App() {
   useEffect(() => {
     if (input) {
       window.scrollTo({
-        top: window.innerHeight * 0.6,
+        top: window.innerHeight * 0.4,
         behavior: 'smooth'
       });
     }
