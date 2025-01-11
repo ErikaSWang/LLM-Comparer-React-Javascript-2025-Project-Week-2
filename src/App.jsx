@@ -33,17 +33,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (input) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: window.innerHeight * 0.7,
-          behavior: 'smooth'
-        });
-      }, 100);
-    }
-  }, [input]);
-
   function handleChange(event) {
     setCurrentIdentity(event.target.value);
   }
@@ -310,6 +299,14 @@ function App() {
     }
 
   }, [input])
+
+
+  useEffect(() => {
+    if (responsive === true && input) {
+      window.scrollTo(0, 500);
+    }
+  }, [input]);
+
 
   
   return (
