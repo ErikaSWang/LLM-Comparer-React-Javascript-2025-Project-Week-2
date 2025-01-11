@@ -303,9 +303,11 @@ function App() {
 
   useEffect(() => {
     if (responsive === true && input) {
-      window.scrollTo(0, 500);
+      document.querySelector('.App').classList.add('scrolled');
+    } else {
+      document.querySelector('.App').classList.remove('scrolled');
     }
-  }, [input]);
+  }, [input, responsive]);
 
 
   

@@ -136,6 +136,12 @@ h6 {
   .width {
     width: auto !important;
   }
+  .App {
+    transition: transform 0.5s ease-in-out;
+  }
+  .App.scrolled {
+    transform: translateY(-40vh);
+  }
 }
 
 @media (min-width: 992px) {
