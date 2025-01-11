@@ -17,6 +17,7 @@ function App() {
   const [outputAnthropic, setOutputAnthropic] = useState(null);
   const [outputX, setOutputX] = useState(null);
   const [outputGemini, setOutputGemini] = useState(null);
+  const [responsive, setResponsive] = useState(false);
 
   function handleChange(event) {
     setCurrentIdentity(event.target.value);
