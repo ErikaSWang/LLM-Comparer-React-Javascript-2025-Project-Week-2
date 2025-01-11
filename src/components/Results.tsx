@@ -7,10 +7,12 @@ const formatResponse = (text: string) => {
   if (!text) return '';
   // Split on period followed by space, keeping the period
   const sentences = text.match(/[^.!?]+[.!?]+\s*/g) || [text];
-  return sentences.map((sentence, index) => (
+  // Limit to 3 sentences
+  const limitedSentences = sentences.slice(0, 3);
+  return limitedSentences.map((sentence, index) => (
     <React.Fragment key={index}>
       {sentence.trim()}
-      {index < sentences.length - 1 && <><br /><br /></>}
+      {index < limitedSentences.length - 1 && <><br /><br /></>}
     </React.Fragment>
   ));
 };
