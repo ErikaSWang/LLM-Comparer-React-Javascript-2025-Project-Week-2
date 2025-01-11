@@ -12,6 +12,7 @@ body {
   background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
+  height: auto !important;
 }
 .outer {
   min-height: calc(100vh - 2rem);
@@ -59,7 +60,22 @@ button:active {
   box-shadow: 4px 5px 9px 6px rgb(224, 217, 199, 0.12) !important;
   box-shadow: inset 2px 3px 5px 2px rgb(238, 233, 221, 0.15);
   border: 0.5px solid #f1efe9 !important;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+.textBox::-webkit-scrollbar {
+  width: 10px;               /* width of the entire scrollbar */
+}
+.textBox::-webkit-scrollbar-track {
+  background: #e9e8e2;        /* color of the tracking area */
+}
+.textBox::-webkit-scrollbar-thumb {
+  background-color: #f1eee9;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 2px solid #e0dbd1;  /* creates padding around scroll thumb */
+  cursor: pointer;
+}
+
 .before {
   background: #fff !important;
 }
@@ -108,12 +124,13 @@ body::-webkit-scrollbar {
   width: 10px;               /* width of the entire scrollbar */
 }
 body::-webkit-scrollbar-track {
-  background: #f1eee9;        /* color of the tracking area */
+  background: #e9e8e2;        /* color of the tracking area */
 }
 body::-webkit-scrollbar-thumb {
-  background-color: #d2d1cb;    /* color of the scroll thumb */
+  background-color: #f1eee9;    /* color of the scroll thumb */
   border-radius: 20px;       /* roundness of the scroll thumb */
   border: 2px solid #e0dbd1;  /* creates padding around scroll thumb */
+  cursor: pointer;
 }
 
 @media (min-width: 100px) {
