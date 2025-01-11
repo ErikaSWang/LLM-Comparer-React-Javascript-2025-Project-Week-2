@@ -6,9 +6,11 @@ import {Form} from 'react-bootstrap';
 const formatResponse = (text: string) => {
   if (!text) return '';
   
-  // Handle numbered lists
-  if (text.match(/\d+\./)) {
-    const segments = text.split(/(?=\d+\.)/);
+  // Handle dash lists or numbered lists
+  if (text.match(/(?:\d+\.|-\s*\*\*)/)) {
+    const segments = text.match(/\d+\./) 
+      ? text.split(/(?=\d+\.)/)
+      : text.split(/(?=-\s*\*\*)/);
     const intro = segments[0].trim();
     const items = segments.slice(1, 4); // Limit to 3 items
     
@@ -17,7 +19,7 @@ const formatResponse = (text: string) => {
         {intro && <>{intro}<br /><br /></>}
         {items.map((item, index) => (
           <React.Fragment key={index}>
-            {item.trim().replace(/\*/g, '')}
+            {item.trim().replace(/\*\*/g, '')}
             {index < items.length - 1 && <><br /><br /></>}
           </React.Fragment>
         ))}
