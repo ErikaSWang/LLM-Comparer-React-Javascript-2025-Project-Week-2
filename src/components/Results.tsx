@@ -14,7 +14,7 @@ const formatResponse = (text: string) => {
     
     return numberedItems.map((item, index) => (
       <React.Fragment key={index}>
-        {`${index + 1}. ${item.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}`}
+        {`${index + 1}. ${item.trim().replace(/:\s*-\s*/g, ': ')}`}
         {index < numberedItems.length - 1 && <><br /><br /></>}
       </React.Fragment>
     ));
