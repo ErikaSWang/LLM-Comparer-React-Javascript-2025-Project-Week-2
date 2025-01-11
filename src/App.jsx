@@ -50,12 +50,6 @@ function App() {
         behavior: 'smooth'
       });
     }
-    if (responsive) {
-      window.scrollTo({
-        top: window.innerHeight * 0.7,
-        behavior: 'smooth'
-      });
-    }
   }
 
   function handleChange2(event) {
