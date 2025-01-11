@@ -10,7 +10,7 @@ const formatResponse = (text: string) => {
   if (text.match(/(?:\d+\.|-\s*\*\*)/)) {
     const segments = text.match(/\d+\./) 
       ? text.split(/(?=\d+\.)/)
-      : text.split(/(?=-\s*\*\*)/);
+      : text.split(/(?=-\s*)/);
     const intro = segments[0].trim();
     const items = segments.slice(1, 4); // Limit to 3 items
     
@@ -27,12 +27,12 @@ const formatResponse = (text: string) => {
     );
   }
   
-  // Handle regular paragraphs
-  const sentences = text.split(/(?<=\.)\s+(?=[A-Z])/);
-  return sentences.map((sentence, index) => (
+  // Handle regular paragraphs and Anthropic's dot lists
+  const segments = text.split(/(?:(?<=\.)\s+(?=[A-Z])|\.\s+(?=-))/);
+  return segments.map((segment, index) => (
     <React.Fragment key={index}>
-      {sentence.trim() + (sentence.trim().endsWith('.') ? '' : '.')}
-      {index < sentences.length - 1 && <><br /><br /></>}
+      {segment.trim() + (segment.trim().endsWith('.') ? '' : '.')}
+      {index < segments.length - 1 && <><br /><br /></>}
     </React.Fragment>
   ));
 };
