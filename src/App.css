@@ -101,6 +101,7 @@ h6 {
   width: 22% !important;
 }
 .scroll{
+  overflow: auto;
 } 
 .scroll::-webkit-scrollbar {
   width: 12px;               /* width of the entire scrollbar */

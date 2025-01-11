@@ -302,7 +302,7 @@ function App() {
 
   
   return (
-    <div className="App">
+    <div className="App scroll">
       <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : 'justify-content-start'}`}>
         <div className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input && responsive === false ? 'special-width' : 'col-lg-6'}`}>
             <Nav />
