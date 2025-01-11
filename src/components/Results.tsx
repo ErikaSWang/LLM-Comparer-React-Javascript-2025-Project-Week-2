@@ -17,7 +17,7 @@ const formatResponse = (text: string) => {
         {intro && <>{intro}<br /><br /></>}
         {items.map((item, index) => (
           <React.Fragment key={index}>
-            {item.trim()}
+            {item.trim().replace(/\*/g, '')}
             {index < items.length - 1 && <><br /><br /></>}
           </React.Fragment>
         ))}
