@@ -38,7 +38,6 @@ const formatResponse = (text: string) => {
 };
 
 export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini, outputX, responsive}) {
-    console.log(responsive)
   
     return (
       <div className={`d-flex ${responsive === true ? 'flex-column align-items-start' : ''}`}>
