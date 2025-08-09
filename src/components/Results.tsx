@@ -37,7 +37,7 @@ const formatResponse = (text: string) => {
   ));
 };
 
-export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini, outputX, responsive}) {
+export default function Results({outputPerplexity, outputOpenai, outputAnthropic, outputGemini, outputMeta, outputX, responsive}) {
   
     return (
       <div className={`d-flex ${responsive === true ? 'flex-column align-items-start' : ''}`}>
@@ -45,16 +45,16 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">Perplexity</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Llama-3.1-Sonar</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($0.20/1M tokens)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">Sonar</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($1/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputPerplexity)}</Card.Text>
           </Card.Body>
         </Card>
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">OpenAI</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Gpt-4o-mini</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($0.15/1M tokens)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">gpt-5-nano</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.05/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputOpenai)}</Card.Text>
           </Card.Body>
         </Card>
@@ -69,16 +69,24 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">Google</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Gemini-1.5-Pro</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">gemini-2.5-flash-preview-05-20</Card.Subtitle>
             <Card.Subtitle className="text-secondary subheading mb-3">(free)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputGemini)}</Card.Text>
           </Card.Body>
         </Card>
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
+            <Card.Title className="title">Meta</Card.Title>
+            <Card.Subtitle className="text-secondary subheading">llama3.2-3b </Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.40/1M tokens)</Card.Subtitle>
+            <Card.Text className="text">{formatResponse(outputMeta)}</Card.Text>
+          </Card.Body>
+        </Card>
+        <Card className="width p-1 mb-3 shadow">
+          <Card.Body>
             <Card.Title className="title">X</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Grok-2-1212</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($2/1M tokens)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">grok-3-mini-beta</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.30/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputX)}</Card.Text>
           </Card.Body>
         </Card>

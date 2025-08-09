@@ -17,6 +17,9 @@ function App() {
   const [outputAnthropic, setOutputAnthropic] = useState(null);
   const [outputX, setOutputX] = useState(null);
   const [outputGemini, setOutputGemini] = useState(null);
+  const [outputMistral, setOutputMistral] = useState(null);
+  const [outputDeepseek, setOutputDeepseek] = useState(null);
+  const [outputMeta, setOutputMeta] = useState(null);
   const [responsive, setResponsive] = useState(false);
 
   
@@ -44,11 +47,14 @@ function App() {
       setIdentity(currentIdentity);
     }
     setInput(currentInput);
-    if (responsive) {
-      window.scrollTo({
-        top: window.innerHeight * 0.7,
-        behavior: 'smooth'
-      });
+    
+    if (responsive === true) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: window.innerHeight * 0.9,
+          behavior: 'smooth'
+        });
+      }, 600);      
     }
   }
 
@@ -67,7 +73,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
@@ -78,7 +84,7 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            model: "llama-3.1-sonar-small-128k-online",
+            model: "sonar",
             messages: [
               {
                 role: "system",
@@ -89,13 +95,6 @@ function App() {
                 content: `Input: ${input}`
               }
             ],
-            temperature: 0.2,
-            top_p: 0.9,
-            search_domain_filter: ["perplexity.ai"],
-            top_k: 0,
-            stream: false,
-            presence_penalty: 0,
-            frequency_penalty: 1,
             max_tokens: 1024
           })
         };
@@ -137,7 +136,7 @@ function App() {
             'Authorization': `Bearer ${openaiKey}`
           },
           body: JSON.stringify({
-            model: "gpt-4o-mini",
+            model: "gpt-5-nano",
             messages: [
               {
                 role: "system",
@@ -223,7 +222,7 @@ function App() {
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiKey}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -254,6 +253,166 @@ function App() {
 
   }, [input])
 
+  
+  // Meta
+  useEffect(() => {
+    async function getOutput() {
+
+      const metaKey = import.meta.env.VITE_META_KEY
+      // const openaiKey = process.env.META_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+      }
+
+      try {
+        const response = await fetch('https://api.llama-api.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${metaKey}`
+          },
+          body: JSON.stringify({
+            model: "llama3.2-3b",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputMeta(data.choices[0].message.content);
+      } catch (error) {
+        console.error("Meta API error:", error);
+        setOutputMeta("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  /*
+  // MISTRAL
+  useEffect(() => {
+    async function getOutput() {
+
+      const mistralKey = import.meta.env.VITE_MISTRAL_KEY
+      // const mistralKey = process.env.MISTRAL_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+      }
+
+      try {
+        const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${mistralKey}`
+          },
+          body: JSON.stringify({
+            model: "mistral-small-latest",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputMistral(data.choices[0].message.content);
+      } catch (error) {
+        console.error("Mistral API error:", error);
+        setOutputMistral("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+  */
+
+  /*
+  // DEEP-SEEK
+  useEffect(() => {
+    async function getOutput() {
+
+      const deepseekKey = import.meta.env.VITE_DEEPSEEK_KEY
+      // const mistralKey = process.env.DEEPSEEK_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+      }
+
+      try {
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${deepseekKey}`
+          },
+          body: JSON.stringify({
+            model: "deepseek-chat",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputDeepseek(data.choices[0].message.content);
+      } catch (error) {
+        console.error("DeepSeek API error:", error);
+        setOutputDeepseek("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  */
+
+  
   // GROK
   useEffect(() => {
     async function getOutput() {
@@ -276,7 +435,7 @@ function App() {
             'Authorization': `Bearer ${xKey}`
           },
           body: JSON.stringify({
-            model: "grok-2-1212",
+            model: "grok-3-mini",
             messages: [
               {
                 role: "system",
@@ -306,7 +465,7 @@ function App() {
     }
 
   }, [input])
-
+  
 
   
   return (
@@ -325,12 +484,13 @@ function App() {
             />
   
         </div>
-        { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputX) ? 
+        { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputMistral) ? 
           <Results
             outputPerplexity={outputPerplexity}
             outputOpenai={outputOpenai}
             outputAnthropic={outputAnthropic}
             outputGemini={outputGemini}
+            outputMeta= {outputMeta}
             outputX={outputX}
             responsive={responsive}
           />

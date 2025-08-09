@@ -4,17 +4,27 @@
   padding: 0;
 }
 html {
-  height: 100vh;
   margin: 0;
   padding: 0;
 }
 body {
+  background-image: url('/brushed_steel.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+/*
+.body-old {
   background: linear-gradient(180deg, rgba(242,238,231,1) 0%, rgba(234,229,218,1) 35%, rgba(229,223,206,1) 100%) !important;
+  height: 100%;
   min-height: 100vh;
   background-size: cover;
   overflow-y: scroll;
   overflow-x: hidden;
 }
+*/
 body::-webkit-scrollbar {
   width: 10px;               /* width of the entire scrollbar */
 }
@@ -46,7 +56,11 @@ nav {
 }
 .navbar-brand {
   color: #b89d4c !important;
-  font-size: 1.75rem !important;
+  font-size: 2rem !important;
+}
+.footer {
+  color: #b89d4c !important;
+  padding-top: 1rem;
 }
 
 .form-control:focus {
@@ -68,9 +82,8 @@ button:active {
   color: #615e51 !important;
   font-family: "Manrope", serif !important;
   font-optical-sizing: auto;
-  font-weight: 325;
+  font-weight: 400;
   font-style: normal;
-  font-size: 0.9rem;
   box-shadow: 4px 5px 9px 6px rgb(224, 217, 199, 0.12) !important;
   box-shadow: inset 2px 3px 5px 2px rgb(238, 233, 221, 0.15);
   border: 0.5px solid #f1efe9 !important;
@@ -113,10 +126,14 @@ h6 {
   font-size: 1.5rem !important;
   font-style: normal;
 }
+.secondary-title {
+  font-size: 1.05rem !important;
+  color: #2a2a28 !important;
+}
 .subheading {
   font-family: "Roboto Condensed", serif;
   font-optical-sizing: auto;
-  font-weight: 350;
+  font-weight: 400;
   font-style: normal;
 }
 .text {
@@ -124,7 +141,7 @@ h6 {
   border: 0.5px solid #f7f6f2 !important;
   font-family: "Figtree", serif;
   font-optical-sizing: auto;
-  font-weight: 350;
+  font-weight: 400;
   font-style: normal;
 }
 .special-width {
@@ -136,14 +153,19 @@ h6 {
   .width {
     width: 100% !important;
   }
-
+  .textBox {
+    font-size: 0.9rem !important;
+  }
 }
 
 @media (min-width: 992px) {
     .container {
-      max-width: 98% !important;
+      max-width: 99% !important;
     }
     .width {
-      width: 15vw !important;
+      width: 12.5vw !important;
+    }
+    .textBox {
+      font-size: 1.1rem !important;
     }
 }
