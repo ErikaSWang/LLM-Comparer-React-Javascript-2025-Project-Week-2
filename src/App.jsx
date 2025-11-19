@@ -135,7 +135,7 @@ function App() {
               personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
             }
       
-            const response = client.responses.create({
+            const response = await client.responses.create({
               model: "gpt-5-nano",
               input: [
                     {
@@ -149,9 +149,14 @@ function App() {
                 ]
             });
 
-            console.log(response);
-            const aiResponse = response;
-            console.log('AI response:', aiResponse)
+            console.log('Full response:', response);
+            
+            // Extract text from the new Responses API format
+            const messageOutput = response.output.find(item => item.type === "message");
+            const textContent = messageOutput?.content.find(c => c.type === "output_text");
+            const aiResponse = textContent?.text || "Unable to generate response";
+            
+            console.log('AI response:', aiResponse);
     
             setOutputOpenai(aiResponse);
     
