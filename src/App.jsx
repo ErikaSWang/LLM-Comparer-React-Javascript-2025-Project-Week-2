@@ -148,11 +148,13 @@ function App() {
         });
 
         const data = await response.json();
-        console.log(data[1].content.text || data.output);
-        const text =
-          data?.output?.[0]?.content?.[1]?.text ??
-          "(no text returned)";
-
+        console.log('Full response:', data);
+        
+        // Find the message item in the output array (it's the one with type: "message")
+        const messageItem = data.output?.find(item => item.type === "message");
+        const text = messageItem?.content?.[0]?.text ?? "(no text returned)";
+        
+        console.log('Extracted text:', text);
         setOutputOpenai(text);
         
       } catch (error) {
