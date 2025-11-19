@@ -23,13 +23,13 @@ function App() {
   const [outputMeta, setOutputMeta] = useState(null);
   const [responsive, setResponsive] = useState(false);
 
-
+  
   useEffect(() => {
     const checkResponsive = () => {
       const width = window.innerWidth;
       setResponsive(width <= 991); // iPad and smaller devices
     };
-
+    
     checkResponsive(); // Check on initial load
     window.addEventListener('resize', checkResponsive);
 
@@ -48,7 +48,7 @@ function App() {
       setIdentity(currentIdentity);
     }
     setInput(currentInput);
-
+    
     if (responsive === true) {
       setTimeout(() => {
         window.scrollTo({
@@ -108,7 +108,7 @@ function App() {
         throw error;
       }
     }
-
+    
     if (input) {
       getOutput();
     }
@@ -120,22 +120,22 @@ function App() {
       async function getOutput() {
 
           try {
-
+        
             const openaiKey = import.meta.env.VITE_OPENAI_KEY
             // const openaiKey = process.env.OPENAI_KEY;
-
+            
             const client = new OpenAI({
               apiKey: openaiKey
             });
-
+      
             let personality = '';
             if (identity) {
               personality = identity;
             } else {
               personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
             }
-
-            const response = await client.responses.create({
+      
+            const response = client.responses.create({
               model: "gpt-5-nano",
               input: [
                     {
@@ -148,30 +148,29 @@ function App() {
                     },
                 ]
             });
-
-            const messageOutput = response.output.find(item => item.type === "message");
-            const aiResponse = messageOutput.content[0].text;
+    
+            const aiResponse = response.output[1].content[0].text;
             console.log('AI response:', aiResponse)
-
+    
             setOutputOpenai(aiResponse);
-
+    
           } catch (error) {
               console.error('OpenAI API error:', error);
               setOutputOpenai("Error: Unable to generate response at this time.");
           }
 
       }
-
+      
       if (input) {
         getOutput();
       }
 
   }, [input])
 
-
+  
   // ANTHROPIC
   useEffect(() => {
-
+    
     async function getOutput() {
       const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
       // const anthropicKey = process.env.ANTHROPIC_KEY;
@@ -187,7 +186,7 @@ function App() {
       } else {
         personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
-
+      
       try {
         const msg = await anthropic.messages.create({
           model: "claude-haiku-4-5-20251001",
@@ -195,9 +194,9 @@ function App() {
           system: personality,
           messages: [{ role: "user", content: input }],
         });
-
+        
         setOutputAnthropic(msg.content[0].text);
-
+        
       } catch (error) {
          console.error("Error fetching from Anthropic:", error);
       }
@@ -242,21 +241,21 @@ function App() {
         const data = await response.json();
 
         setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
-
+        
       } catch (error) {
         console.error("Gemini API error:", error);
         setOutputGemini("Error: Unable to generate response at this time.");
       }
 
     }
-
+    
     if (input) {
       getOutput();
     }
 
   }, [input])
 
-
+  
   // Meta
   useEffect(() => {
     async function getOutput() {
@@ -415,7 +414,7 @@ function App() {
 
   */
 
-
+  
   // GROK
   useEffect(() => {
     async function getOutput() {
@@ -468,15 +467,15 @@ function App() {
     }
 
   }, [input])
+  
 
-
-
+  
   return (
     <div className="App scroll">
       <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : 'justify-content-start'}`}>
         <div className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input && responsive === false ? 'special-width' : 'col-lg-6'}`}>
             <Nav />
-
+    
             <Input
               currentIdentity={currentIdentity}
               handleChange={handleChange}
@@ -485,7 +484,7 @@ function App() {
               handleSubmit={handleSubmit}
               input={input}
             />
-
+  
         </div>
         { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputMistral) ? 
           <Results
@@ -500,7 +499,7 @@ function App() {
           : null
         }
       </Container>
-
+      
     </div>
   );
 }
