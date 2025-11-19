@@ -135,22 +135,21 @@ function App() {
               personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
             }
       
-            const response = await client.chat.completions.create({
-              model: "gpt-4o-mini",
-              messages: [
+            const response = client.responses.create({
+              model: "gpt-5-nano",
+              input: [
                     {
-                        role: "system",
+                        role: "developer",
                         content: personality
                     },
                     {
                         role: "user",
                         content: input
                     },
-                ],
-                max_tokens: 1024
+                ]
             });
     
-            const aiResponse = response.choices[0].message.content;
+            const aiResponse = response.output_text;
             console.log('AI response:', aiResponse)
     
             setOutputOpenai(aiResponse);
