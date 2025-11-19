@@ -61,8 +61,8 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">Anthropic</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Claude-3.5-Haiku</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($0.80/MTok)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">Claude-4.5-Haiku</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($1/MTok)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputAnthropic)}</Card.Text>
           </Card.Body>
         </Card>

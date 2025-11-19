@@ -23,7 +23,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.33.1",
     "bootstrap": "^5.3.3",
-    "openai": "^4.77.3",
+    "openai": "^4.104.0",
     "react-bootstrap": "^2.10.7"
   }
 }

@@ -6,6 +6,7 @@ import Nav from './components/Nav.tsx';
 import Input from './components/Input.tsx';
 import Results from './components/Results.tsx';
 import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from "openai";
 
 function App() {
   const [currentIdentity, setCurrentIdentity] = useState('');
@@ -116,52 +117,53 @@ function App() {
 
   // OPENAI
   useEffect(() => {
-    async function getOutput() {
+      async function getOutput() {
+
+          try {
+        
+            const openaiKey = import.meta.env.VITE_OPENAI_KEY
+            // const openaiKey = process.env.OPENAI_KEY;
+            
+            const client = new OpenAI({
+              apiKey: openaiKey
+            });
       
-      const openaiKey = import.meta.env.VITE_OPENAI_KEY
-      // const openaiKey = process.env.OPENAI_KEY;
-
-      let personality = '';
-      if (identity) {
-        personality = identity;
-      } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
-      }
-
-      try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${openaiKey}`
-          },
-          body: JSON.stringify({
-            model: "gpt-5-nano",
-            messages: [
-              {
-                role: "system",
-                content: personality
-              },
-              {
-                role: "user",
-                content: input,
-              }
-            ]
-          })
-        });
-
-        const data = await response.json();
-        setOutputOpenai(data.choices[0].message.content);
-      } catch (error) {
-        console.error("OpenAI API error:", error);
-        setOutputOpenai("Error: Unable to generate response at this time.");
-      }
-
-    }
+            let personality = '';
+            if (identity) {
+              personality = identity;
+            } else {
+              personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+            }
+      
+            const response = client.responses.create({
+              model: "gpt-5-nano",
+              input: [
+                    {
+                        role: "developer",
+                        content: personality
+                    },
+                    {
+                        role: "user",
+                        content: input
+                    },
+                ]
+            });
     
-    if (input) {
-      getOutput();
-    }
+            const aiResponse = response.output_text;
+            console.log('AI response:', aiResponse)
+    
+            setOutputOpenai(aiResponse);
+    
+          } catch (error) {
+              console.error('OpenAI API error:', error);
+              setOutputOpenai("Error: Unable to generate response at this time.");
+          }
+
+      }
+      
+      if (input) {
+        getOutput();
+      }
 
   }, [input])
 
@@ -182,12 +184,12 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
       
       try {
         const msg = await anthropic.messages.create({
-          model: "claude-3-5-haiku-latest",
+          model: "claude-haiku-4-5-20251001",
           max_tokens: 1024,
           system: personality,
           messages: [{ role: "user", content: input }],
@@ -218,7 +220,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
@@ -265,7 +267,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
@@ -317,7 +319,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
@@ -370,7 +372,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
@@ -424,7 +426,7 @@ function App() {
       if (identity) {
         personality = identity;
       } else {
-        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses, and never take more than 3 sentences to respond. Do not respond with more than 3 sentences."
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
       }
 
       try {
