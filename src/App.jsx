@@ -6,7 +6,6 @@ import Nav from './components/Nav.tsx';
 import Input from './components/Input.tsx';
 import Results from './components/Results.tsx';
 import Anthropic from '@anthropic-ai/sdk';
-import OpenAI from "openai";
 
 function App() {
   const [currentIdentity, setCurrentIdentity] = useState('');
@@ -66,6 +65,8 @@ function App() {
   // PERPLEXITY
   useEffect(() => {
     async function getOutput() {
+      
+      setOutputPerplexity(null);
 
       const perplexityKey = import.meta.env.VITE_PERPLEXITY_KEY
       // const perplexityKey = process.env.PERPLEXITY_KEY;
@@ -115,61 +116,55 @@ function App() {
 
   }, [input])
 
+  
   // OPENAI
   useEffect(() => {
-      async function getOutput() {
+    async function getOutput() {
 
-          try {
+      setOutputOpenai(null);
+      
+      const openaiKey = import.meta.env.VITE_OPENAI_KEY;
+      // const openaiKey = process.env.OPENAI_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/responses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openaiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-5-nano",
+            instructions: personality,
+            input: input
+          })
+        });
+
+        const data = await response.json();
+        console.log(data[1].content.text || data.output);
+        const text =
+          data?.output?.[0]?.content?.[1]?.text ??
+          "(no text returned)";
+
+        setOutputOpenai(text);
         
-            const openaiKey = import.meta.env.VITE_OPENAI_KEY
-            // const openaiKey = process.env.OPENAI_KEY;
-            
-            const client = new OpenAI({
-              apiKey: openaiKey
-            });
-      
-            let personality = '';
-            if (identity) {
-              personality = identity;
-            } else {
-              personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
-            }
-      
-            const response = await client.responses.create({
-              model: "gpt-5-nano",
-              input: [
-                    {
-                        role: "developer",
-                        content: personality
-                    },
-                    {
-                        role: "user",
-                        content: input
-                    },
-                ]
-            });
-
-            console.log('Full response:', response);
-            
-            // Extract text from the new Responses API format
-            const messageOutput = response.output.find(item => item.type === "message");
-            const textContent = messageOutput?.content.find(c => c.type === "output_text");
-            const aiResponse = textContent?.text || "Unable to generate response";
-            
-            console.log('AI response:', aiResponse);
-    
-            setOutputOpenai(aiResponse);
-    
-          } catch (error) {
-              console.error('OpenAI API error:', error);
-              setOutputOpenai("Error: Unable to generate response at this time.");
-          }
-
+      } catch (error) {
+        console.error("OpenAI API error:", error);
+        setOutputOpenai("Error: Unable to generate response at this time.");
       }
-      
-      if (input) {
-        getOutput();
-      }
+
+    }
+    
+    if (input) {
+      getOutput();
+    }
 
   }, [input])
 
@@ -178,6 +173,9 @@ function App() {
   useEffect(() => {
     
     async function getOutput() {
+
+      setOutputAnthropic(null);
+      
       const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
       // const anthropicKey = process.env.ANTHROPIC_KEY;
 
@@ -219,6 +217,8 @@ function App() {
   useEffect(() => {
     async function getOutput() {
 
+      setOutputGemini(null);
+
       const geminiKey = import.meta.env.VITE_GEMINI_KEY
       // const geminiKey = process.env.GEMINI_KEY;
 
@@ -230,7 +230,7 @@ function App() {
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${geminiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -265,6 +265,8 @@ function App() {
   // Meta
   useEffect(() => {
     async function getOutput() {
+
+      setOutputMeta(null);
 
       const metaKey = import.meta.env.VITE_META_KEY
       // const openaiKey = process.env.META_KEY;
@@ -317,6 +319,8 @@ function App() {
   // MISTRAL
   useEffect(() => {
     async function getOutput() {
+
+      setOutputMistral(null);
 
       const mistralKey = import.meta.env.VITE_MISTRAL_KEY
       // const mistralKey = process.env.MISTRAL_KEY;
@@ -371,6 +375,8 @@ function App() {
   useEffect(() => {
     async function getOutput() {
 
+      setOutputDeepseek(null);
+
       const deepseekKey = import.meta.env.VITE_DEEPSEEK_KEY
       // const mistralKey = process.env.DEEPSEEK_KEY;
 
@@ -424,6 +430,8 @@ function App() {
   // GROK
   useEffect(() => {
     async function getOutput() {
+
+      setOutputX(null);
 
       const xKey = import.meta.env.VITE_X_KEY
       // const xKey = process.env.X_KEY;
