@@ -149,7 +149,7 @@ function App() {
                 ]
             });
     
-            const aiResponse = response.output_text;
+            const aiResponse = response.output[1].content[0].text;
             console.log('AI response:', aiResponse)
     
             setOutputOpenai(aiResponse);
