@@ -24,7 +24,7 @@ export default function Input({currentIdentity, handleChange, currentInput, hand
                         `} value={currentInput} onChange={handleChange2} required />
           </Form.Group>
           <div className="d-flex justify-content-between">
-            <p className="fs-6 footer">Last edited: November 19, 2025</p>
+            <p className="fs-6 footer">Last edited: June 7, 2026</p>
             <Button variant="light" type="submit">
               Submit 
             </Button>

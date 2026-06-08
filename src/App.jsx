@@ -141,9 +141,11 @@ function App() {
             'Authorization': `Bearer ${openaiKey}`
           },
           body: JSON.stringify({
-            model: "gpt-5-nano",
-            instructions: personality,
-            input: input
+            model: "gpt-5.4-nano",
+            input: {
+              role: personality,
+              content: input
+            }
           })
         });
 
@@ -151,8 +153,7 @@ function App() {
         console.log('Full response:', data);
         
         // Find the message item in the output array (it's the one with type: "message")
-        const messageItem = data.output?.find(item => item.type === "message");
-        const text = messageItem?.content?.[0]?.text ?? "(no text returned)";
+        const text = data.output[0].content[0].text;
         
         console.log('Extracted text:', text);
         setOutputOpenai(text);
@@ -232,7 +233,7 @@ function App() {
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${geminiKey}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -263,7 +264,7 @@ function App() {
 
   }, [input])
 
-  
+  /*
   // Meta
   useEffect(() => {
     async function getOutput() {
@@ -316,6 +317,7 @@ function App() {
     }
 
   }, [input])
+  */
 
   /*
   // MISTRAL
@@ -453,7 +455,7 @@ function App() {
             'Authorization': `Bearer ${xKey}`
           },
           body: JSON.stringify({
-            model: "grok-3-mini",
+            model: "grok-4.3",
             messages: [
               {
                 role: "system",
