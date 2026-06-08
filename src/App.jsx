@@ -101,7 +101,7 @@ function App() {
           })
         };
 
-        const response = await fetch('https://api.perplexity.ai/chat/completions', options);
+        const response = await fetch('https://api.perplexity.ai/v1/sonar', options);
         const data = await response.json();
         setOutputPerplexity(data.choices[0].message.content || "Unable to generate results at this time.");
       } catch (error) {
@@ -182,7 +182,7 @@ function App() {
       const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
       // const anthropicKey = process.env.ANTHROPIC_KEY;
 
-      const anthropic = new Anthropic({
+      const client = new Anthropic({
         apiKey: anthropicKey,
         dangerouslyAllowBrowser: true
       });
@@ -195,14 +195,14 @@ function App() {
       }
       
       try {
-        const msg = await anthropic.messages.create({
+        const message = await client.messages.create({
           model: "claude-haiku-4-5-20251001",
           max_tokens: 1024,
           system: personality,
           messages: [{ role: "user", content: input }],
         });
         
-        setOutputAnthropic(msg.content[0].text);
+        setOutputAnthropic(message.content);
         
       } catch (error) {
          console.error("Error fetching from Anthropic:", error);
