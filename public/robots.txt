@@ -97,7 +97,7 @@ Disallow: /
 # =======================================================
 # 4. GLOBAL METADATA & SIGNALS
 # =======================================================
-Sitemap: https://ai.erikawang.com
+Sitemap: https://ai.erikawang.com/sitemap.xml
 
 # AI Agent Specific Usage Signals (Emerging Standard)
 Content-Signal: search=yes, ai-input=yes, ai-train=no
