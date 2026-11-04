@@ -45,30 +45,30 @@ export default function Results({outputPerplexity, outputOpenai, outputAnthropic
           <Card.Body>
             <Card.Title className="title">Perplexity</Card.Title>
             <Card.Subtitle className="text-secondary subheading">Sonar</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($1/1M tokens)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.25/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputPerplexity)}</Card.Text>
           </Card.Body>
         </Card>
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">OpenAI</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">gpt-5.4-nano</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($0.20/1M tokens)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">gpt-6-luna</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.10/1M tokens)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputOpenai)}</Card.Text>
           </Card.Body>
         </Card>
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">Anthropic</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">Claude-4.5-Haiku</Card.Subtitle>
-            <Card.Subtitle className="text-secondary subheading mb-3">($1/MTok)</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">Claude-5.5-Haiku</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading mb-3">($0.10/MTok)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputAnthropic)}</Card.Text>
           </Card.Body>
         </Card>
         <Card className="width p-1 mb-3 shadow">
           <Card.Body>
             <Card.Title className="title">Google</Card.Title>
-            <Card.Subtitle className="text-secondary subheading">gemini-3.5-flash</Card.Subtitle>
+            <Card.Subtitle className="text-secondary subheading">gemini-3.8-flash</Card.Subtitle>
             <Card.Subtitle className="text-secondary subheading mb-3">(free)</Card.Subtitle>
             <Card.Text className="text">{formatResponse(outputGemini)}</Card.Text>
           </Card.Body>

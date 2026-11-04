@@ -63,7 +63,6 @@ function App() {
   }
 
   // PERPLEXITY
-  /*
   useEffect(() => {
     async function getOutput() {
       
@@ -87,27 +86,17 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            model: "sonar",
-            messages: [
-              {
-                role: "system",
-                content: personality
-              },
-              {
-                role: "user",
-                content: `Input: ${input}`
-              }
-            ],
-            max_tokens: 1024
+            effort: 'fast',
+            input: input
           })
         };
 
-        const response = await fetch('https://api.perplexity.ai/v1/sonar', options);
+        const response = await fetch('https://api.perplexity.ai/v1/agent', options);
         const data = await response.json();
-        setOutputPerplexity(data.choices[0].message.content || "Unable to generate results at this time.");
+        setOutputPerplexity(data.output_text || "Unable to generate results at this time.");
       } catch (error) {
         console.error("Perplexity API error:", error);
-        throw error;
+        setOutputPerplexity("Error: Unable to generate response at this time.");
       }
     }
     
@@ -116,7 +105,7 @@ function App() {
     }
 
   }, [input])
-*/
+
   
   // OPENAI
   useEffect(() => {
@@ -152,7 +141,7 @@ function App() {
         console.log('Full response:', data);
         
         // Find the message item in the output array (it's the one with type: "message")
-        const text = data.output[0].content[0].text;
+        const text = data.output_text;
         
         console.log('Extracted text:', text);
         setOutputOpenai(text);
@@ -194,7 +183,7 @@ function App() {
       }
       
       try {
-        const message = await client.messages.create({
+        const message = await anthropic.messages.create({
           model: "claude-haiku-5-5",
           max_tokens: 1024,
           system: personality,
@@ -232,23 +221,20 @@ function App() {
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${geminiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/interactions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            contents: [{
-              parts:[{
-                text: `${personality} ${input}`
-              }]
-            }]
+            model: "gemini-3.8-flash",
+            input: input
           })
         });
 
         const data = await response.json();
 
-        setOutputGemini(data.candidates[0].content.parts[0].text || "Unable to generate results at this time.");
+        setOutputGemini(data.output_text || "Unable to generate results at this time.");
         
       } catch (error) {
         console.error("Gemini API error:", error);
@@ -473,7 +459,7 @@ function App() {
         const data = await response.json();
         setOutputX(data.choices[0].message.content);
       } catch (error) {
-        console.error("OpenAI API error:", error);
+        console.error("Grok API error:", error);
         setOutputX("Error: Unable to generate response at this time.");
       }
 
