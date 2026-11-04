@@ -142,7 +142,7 @@ function App() {
             'Authorization': `Bearer ${openaiKey}`
           },
           body: JSON.stringify({
-            model: "gpt-5.4-nano",
+            model: "gpt-6-luna",
             input: {
               role: personality,
               content: input
