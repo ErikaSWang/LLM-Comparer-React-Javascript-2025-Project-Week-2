@@ -143,10 +143,8 @@ function App() {
           },
           body: JSON.stringify({
             model: "gpt-6-luna",
-            input: {
-              role: personality,
-              content: input
-            }
+            instructions: personality,
+            input: input
           })
         });
 
