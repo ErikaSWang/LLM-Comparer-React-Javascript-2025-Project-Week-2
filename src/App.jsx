@@ -63,6 +63,7 @@ function App() {
   }
 
   // PERPLEXITY
+  /*
   useEffect(() => {
     async function getOutput() {
       
@@ -115,7 +116,7 @@ function App() {
     }
 
   }, [input])
-
+*/
   
   // OPENAI
   useEffect(() => {
@@ -196,7 +197,7 @@ function App() {
       
       try {
         const message = await client.messages.create({
-          model: "claude-haiku-4-5-20251001",
+          model: "claude-haiku-5-5",
           max_tokens: 1024,
           system: personality,
           messages: [{ role: "user", content: input }],
