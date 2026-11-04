@@ -80,17 +80,8 @@ function App() {
       }
 
       try {
-        const options = {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${perplexityKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            effort: 'fast',
-            input: input
-          })
-        };
+
+        const client = new Perplexity();
 
         const response = await client.responses.create({
           effort: 'fast',
