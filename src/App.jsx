@@ -5,6 +5,7 @@ import {Container} from 'react-bootstrap';
 import Nav from './components/Nav.tsx';
 import Input from './components/Input.tsx';
 import Results from './components/Results.tsx';
+import Perplexity from '@perplexity-ai/perplexity_ai';
 import Anthropic from '@anthropic-ai/sdk';
 
 function App() {
@@ -91,7 +92,22 @@ function App() {
           })
         };
 
-        const response = await fetch('https://api.perplexity.ai/v1/agent', options);
+        const response = await client.responses.create({
+          effort: 'fast',
+          input: [
+            { 
+              type: 'message',
+              role: 'system',
+              content: personality
+            },
+            { 
+              type: 'message',
+              role: 'user',
+              content: input
+            },
+          ],
+        });
+        
         const data = await response.json();
         setOutputPerplexity(data.output_text || "Unable to generate results at this time.");
       } catch (error) {
