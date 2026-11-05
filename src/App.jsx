@@ -81,7 +81,9 @@ function App() {
 
       try {
 
-        const client = new Perplexity();
+        const client = new Perplexity({
+          apiKey: perplexityKey
+        });
 
         const response = await client.responses.create({
           effort: 'fast',
@@ -147,9 +149,10 @@ function App() {
         const data = await response.json();
         console.log('Full response:', data);
         
-        // Find the message item in the output array (it's the one with type: "message")
-        const text = data.output_text;
         
+        // Find the message item in the output array (it's the one with type: "message")
+        const text = data.output[1].content.logprobs.text;
+    
         console.log('Extracted text:', text);
         setOutputOpenai(text);
         
@@ -190,7 +193,7 @@ function App() {
       }
       
       try {
-        const message = await anthropic.messages.create({
+        const message = await client.messages.create({
           model: "claude-haiku-5-5",
           max_tokens: 1024,
           system: personality,
