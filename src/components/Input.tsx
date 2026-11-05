@@ -26,7 +26,7 @@ export default function Input({currentIdentity, handleChange, currentInput, hand
           <div className="d-flex justify-content-between">
             <p className="fs-6 footer">Last edited: November 4, 2026</p>
             <Button variant="light" type="submit" disabled={submitting}>
-              {submitting ? 'Waiting for responses…' : 'Ask all models'}
+              {submitting ? 'Waiting for responses…' : 'Ask Models'}
             </Button>
           </div>
         </Form>
