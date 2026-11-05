@@ -7,6 +7,7 @@ import Input from './components/Input.tsx';
 import Results from './components/Results.tsx';
 import Perplexity from '@perplexity-ai/perplexity_ai';
 import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenAI } from "@google/genai";
 
 function App() {
   const [currentIdentity, setCurrentIdentity] = useState('');
@@ -151,7 +152,7 @@ function App() {
         
         
         // Find the message item in the output array (it's the one with type: "message")
-        const text = data.output[1].content.logprobs.text;
+        const text = data.output[0].content[0].text;
     
         console.log('Extracted text:', text);
         setOutputOpenai(text);
@@ -221,7 +222,10 @@ function App() {
       setOutputGemini(null);
 
       const geminiKey = import.meta.env.VITE_GEMINI_KEY
-      // const geminiKey = process.env.GEMINI_KEY;
+
+      const ai = new GoogleGenAI({
+        apiKey: geminiKey
+      });
 
       let personality = '';
       if (identity) {
@@ -231,15 +235,9 @@ function App() {
       }
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/interactions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: "gemini-3.8-flash",
-            input: input
-          })
+        const response = await ai.interactions.create({
+          model: "gemini-3.8-flash",
+          input: "Explain how AI works in a few words",
         });
 
         const data = await response.json();
