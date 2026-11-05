@@ -14,6 +14,7 @@ function App() {
   const [results, setResults] = useState(null);
   const [responsive, setResponsive] = useState(false);
   const latestRequest = useRef(0);
+  const submittedRequest = useRef(null);
 
   useEffect(() => {
     const checkResponsive = () => setResponsive(window.innerWidth <= 991);
@@ -28,12 +29,22 @@ function App() {
     if (!prompt) return;
 
     const requestId = ++latestRequest.current;
+    submittedRequest.current = { prompt, personality: currentIdentity, requestId };
     setSubmittedPrompt(prompt);
     setResults(
       Object.fromEntries(
         PROVIDERS.map((provider) => [provider.id, { status: "loading" }]),
       ),
     );
+
+    if (responsive) {
+      window.setTimeout(() => {
+        document.querySelector(".results-panel")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
 
     await Promise.all(
       PROVIDERS.map(async (provider) => {
@@ -44,10 +55,22 @@ function App() {
       }),
     );
 
-    if (responsive) {
-      window.setTimeout(() => {
-        window.scrollTo({ top: window.innerHeight * 0.9, behavior: "smooth" });
-      }, 200);
+  }
+
+  async function retryProvider(provider) {
+    const request = submittedRequest.current;
+    if (!request) return;
+    setResults((current) => ({
+      ...current,
+      [provider.id]: { status: "loading" },
+    }));
+    const result = await testProvider(
+      provider,
+      request.prompt,
+      request.personality,
+    );
+    if (latestRequest.current === request.requestId) {
+      setResults((current) => ({ ...current, [provider.id]: result }));
     }
   }
 
@@ -83,6 +106,7 @@ function App() {
             providers={PROVIDERS}
             responsive={responsive}
             prompt={submittedPrompt}
+            onRetry={retryProvider}
           />
         )}
       </Container>

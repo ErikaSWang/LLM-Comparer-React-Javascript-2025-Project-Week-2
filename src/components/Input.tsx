@@ -5,7 +5,7 @@ import {Button} from 'react-bootstrap';
 export default function Input({currentIdentity, handleChange, currentInput, handleChange2, handleSubmit, submitting}: any) {
     return (
         <Form className="w-100 p-3" onSubmit={handleSubmit}>
-          <Form.Group className="mb-4" controlId="Form.Textarea2">
+          <Form.Group className="mb-4" controlId="personality-input">
             <h6><Form.Label className={`secondary-title ${submitting ? 'text-after' : ''}`}>Give Your AI a Personality (optional)</Form.Label></h6>
               <Form.Control className={`textBox ${submitting ? 'after text-secondary' : 'before'}`} as="textarea" rows={5} placeholder={`Examples:
     • You are a great listener
@@ -13,7 +13,7 @@ export default function Input({currentIdentity, handleChange, currentInput, hand
     • You are an expert in social trends
               `} value={currentIdentity} onChange={handleChange} />
           </Form.Group>
-          <Form.Group className="mb-4" controlId="Form.Textarea2">
+          <Form.Group className="mb-4" controlId="question-input">
             <h6><Form.Label className={`secondary-title ${submitting ? 'text-after' : ''}`}>Ask AI a Question</Form.Label></h6>
               <Form.Control className={`textBox ${submitting ? 'after text-secondary' : 'before'}`} as="textarea" rows={9} placeholder={`Examples:
     • What books will change my view the world?

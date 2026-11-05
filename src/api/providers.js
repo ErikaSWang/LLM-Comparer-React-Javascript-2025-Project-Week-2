@@ -9,7 +9,7 @@ export const PROVIDERS = [
   {
     id: "perplexity",
     name: "Perplexity",
-    model: "Sonar",
+    model: "Agent API · fast",
     keyName: "VITE_PERPLEXITY_KEY",
   },
   {
@@ -38,13 +38,19 @@ export const PROVIDERS = [
   },
 ];
 
-function getResponseText(data) {
+export function getResponseText(data) {
   if (typeof data?.output_text === "string") return data.output_text.trim();
 
-  const responseParts = (data?.output ?? []).flatMap((item) => item?.content ?? []);
+  const output = Array.isArray(data?.output) ? data.output : [];
+  const steps = Array.isArray(data?.steps)
+    ? data.steps.filter((step) => step.type === "model_output")
+    : [];
+  const responseParts = [...output, ...steps].flatMap((item) =>
+    Array.isArray(item?.content) ? item.content : [],
+  );
   const responseText = responseParts
-    .filter((part) => part?.type === "output_text" || part?.type === "text")
-    .map((part) => part.text)
+    .filter((part) => ["output_text", "text", "refusal"].includes(part?.type))
+    .map((part) => part.text ?? part.refusal)
     .filter((part) => typeof part === "string")
     .join("\n")
     .trim();
@@ -69,17 +75,35 @@ function getApiError(data, fallback) {
     data?.error?.type ??
     data?.message ??
     fallback;
-  return String(message).slice(0, 400);
+  return String(message);
 }
 
-async function readJsonResponse(response) {
+export function readProviderResult(data, text = getResponseText(data)) {
+  if (data?.error || ["failed", "cancelled"].includes(data?.status)) {
+    throw new Error(getApiError(data, `The provider reported ${data.status}.`));
+  }
+  const stoppedEarly =
+    data?.status === "incomplete" ||
+    data?.stop_reason === "max_tokens" ||
+    data?.choices?.[0]?.finish_reason === "length";
+  return {
+    text,
+    warning: stoppedEarly
+      ? `The provider stopped before completing its answer (${data?.incomplete_details?.reason ?? "output limit reached"}).`
+      : undefined,
+  };
+}
+
+export async function readJsonResponse(response) {
   const body = await response.text();
   try {
     return body ? JSON.parse(body) : {};
   } catch {
-    throw new Error(
+    const error = new Error(
       `The provider returned a non-JSON response (HTTP ${response.status}).`,
     );
+    error.status = response.status;
+    throw error;
   }
 }
 
@@ -100,7 +124,7 @@ async function callProvider(provider, apiKey, prompt, personality) {
         { type: "message", role: "user", content: prompt },
       ],
     });
-    return getResponseText(response);
+    return readProviderResult(response);
   }
 
   if (provider.id === "anthropic") {
@@ -116,21 +140,26 @@ async function callProvider(provider, apiKey, prompt, personality) {
       system: personality,
       messages: [{ role: "user", content: prompt }],
     });
-    return (response.content ?? [])
-      .filter((part) => part.type === "text")
-      .map((part) => part.text)
-      .join("\n")
-      .trim();
+    const text = (response.content ?? [])
+        .filter((part) => part.type === "text")
+        .map((part) => part.text)
+        .join("\n")
+        .trim();
+    return readProviderResult(response, text);
   }
 
   if (provider.id === "gemini") {
     const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.interactions.create({
-      model: "gemini-3.8-flash",
-      input: prompt,
-      system_instruction: personality,
-    });
-    return getResponseText(response);
+    const response = await ai.interactions.create(
+      {
+        model: "gemini-3.8-flash",
+        input: prompt,
+        system_instruction: personality,
+        store: false,
+      },
+      { timeout_ms: 90_000, signal: timeoutSignal },
+    );
+    return readProviderResult(response);
   }
 
   const request =
@@ -169,10 +198,10 @@ async function callProvider(provider, apiKey, prompt, personality) {
     throw error;
   }
 
-  return getResponseText(data);
+  return readProviderResult(data);
 }
 
-function classifyError(error) {
+export function classifyError(error) {
   const status = error?.status;
   if (status === 401 || status === 403) return "Authentication or access was rejected.";
   if (status === 400 || status === 404 || status === 422) {
@@ -183,7 +212,7 @@ function classifyError(error) {
   if (error?.name === "TimeoutError" || error?.name === "AbortError") {
     return "The request timed out after 90 seconds.";
   }
-  if (error instanceof TypeError) {
+  if (/failed to fetch|networkerror|network request failed|connection error/i.test(error?.message)) {
     return "Network or browser CORS error; the request did not return a readable response.";
   }
   return error?.message || "The request failed before a response could be read.";
@@ -196,32 +225,44 @@ export async function testProvider(provider, prompt, personality) {
   }
 
   const startedAt = performance.now();
+  let timeout;
   try {
-    const text = await callProvider(
-      provider,
-      apiKey,
-      prompt,
-      personality.trim() || DEFAULT_PERSONALITY,
-    );
+    const result = await Promise.race([
+      callProvider(
+        provider,
+        apiKey,
+        prompt,
+        personality.trim() || DEFAULT_PERSONALITY,
+      ),
+      new Promise((_, reject) => {
+        timeout = window.setTimeout(() => {
+          const error = new Error("The request timed out after 90 seconds.");
+          error.name = "TimeoutError";
+          reject(error);
+        }, 90_000);
+      }),
+    ]);
     const durationMs = Math.round(performance.now() - startedAt);
-    if (!text) {
+    if (!result.text) {
       return {
         status: "empty",
         durationMs,
-        message: "The request succeeded, but the response contained no text.",
+        message: result.warning || "The request succeeded, but the response contained no text.",
       };
     }
-    return { status: "success", durationMs, text };
+    return { status: "success", durationMs, text: result.text, message: result.warning };
   } catch (error) {
     const durationMs = Math.round(performance.now() - startedAt);
     return {
       status: "error",
       durationMs,
       httpStatus: error?.status,
-      message: classifyError(error),
+      message: classifyError(error).replaceAll(apiKey, "[redacted]").slice(0, 400),
       detail: error?.message
-        ? String(error.message).replace(apiKey, "[redacted]").slice(0, 400)
+        ? String(error.message).replaceAll(apiKey, "[redacted]").slice(0, 400)
         : undefined,
     };
+  } finally {
+    window.clearTimeout(timeout);
   }
 }
