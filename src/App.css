@@ -170,17 +170,13 @@ h6 {
   flex-wrap: nowrap;
   gap: 0;
   align-items: start;
-  overflow-x: auto;
 }
 
 .provider-card {
-  flex: 1 0 0;
+  flex: 1 1 0;
   min-width: 0;
   margin: 0;
-}
-
-.results-panel-mobile .provider-card {
-  flex: 1 0 200px;
+  overflow-wrap: anywhere;
 }
 
 .status-badge {
