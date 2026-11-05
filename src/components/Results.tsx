@@ -77,7 +77,7 @@ export default function Results({
           const result = results[provider.id];
           const status = statuses[result.status];
           return (
-            <Card key={provider.id} data-provider-id={provider.id} className="provider-card p-1 mb-3 shadow">
+            <Card key={provider.id} data-provider-id={provider.id} className="provider-card p-1 shadow">
               <Card.Body>
                 <Card.Title className="title">{provider.name}</Card.Title>
                 <Card.Subtitle className="text-secondary subheading mb-3">

@@ -1,0 +1,1 @@
+- [Response comparison layout](comparison-layout.md) — Keep all five responses in one non-wrapping row without margins for direct comparison.
