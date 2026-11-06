@@ -1,115 +1,518 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container } from "react-bootstrap";
-import Nav from "./components/Nav.tsx";
-import Input from "./components/Input.tsx";
-import Results from "./components/Results.tsx";
-import { PROVIDERS, testProvider } from "./api/providers.js";
+import React, { useState, useEffect } from "react";
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container} from 'react-bootstrap';
+import Nav from './components/Nav.tsx';
+import Input from './components/Input.tsx';
+import Results from './components/Results.tsx';
+import Perplexity from '@perplexity-ai/perplexity_ai';
+import Anthropic from '@anthropic-ai/sdk';
 
 function App() {
-  const [currentIdentity, setCurrentIdentity] = useState("");
-  const [currentInput, setCurrentInput] = useState("");
-  const [submittedPrompt, setSubmittedPrompt] = useState("");
-  const [results, setResults] = useState(null);
+  const [currentIdentity, setCurrentIdentity] = useState('');
+  const [identity, setIdentity] = useState('');
+  const [currentInput, setCurrentInput] = useState('');
+  const [input, setInput] = useState(null);
+  const [outputPerplexity, setOutputPerplexity] = useState(null);
+  const [outputOpenai, setOutputOpenai] = useState(null);
+  const [outputAnthropic, setOutputAnthropic] = useState(null);
+  const [outputX, setOutputX] = useState(null);
+  const [outputGemini, setOutputGemini] = useState(null);
+  const [outputMistral, setOutputMistral] = useState(null);
+  const [outputDeepseek, setOutputDeepseek] = useState(null);
+  const [outputMeta, setOutputMeta] = useState(null);
   const [responsive, setResponsive] = useState(false);
-  const latestRequest = useRef(0);
-  const submittedRequest = useRef(null);
 
+  
   useEffect(() => {
-    const checkResponsive = () => setResponsive(window.innerWidth <= 991);
-    checkResponsive();
-    window.addEventListener("resize", checkResponsive);
-    return () => window.removeEventListener("resize", checkResponsive);
+    const checkResponsive = () => {
+      const width = window.innerWidth;
+      setResponsive(width <= 991); // iPad and smaller devices
+    };
+    
+    checkResponsive(); // Check on initial load
+    window.addEventListener('resize', checkResponsive);
+
+    return () => {
+      window.removeEventListener('resize', checkResponsive);
+    };
   }, []);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const prompt = currentInput.trim();
-    if (!prompt) return;
+  function handleChange(event) {
+    setCurrentIdentity(event.target.value);
+  }
 
-    const requestId = ++latestRequest.current;
-    submittedRequest.current = { prompt, personality: currentIdentity, requestId };
-    setSubmittedPrompt(prompt);
-    setResults(
-      Object.fromEntries(
-        PROVIDERS.map((provider) => [provider.id, { status: "loading" }]),
-      ),
-    );
-
-    if (responsive) {
-      window.setTimeout(() => {
-        document.querySelector(".results-panel")?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (currentIdentity) {
+      setIdentity(currentIdentity);
+    }
+    setInput(currentInput);
+    
+    if (responsive === true) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: window.innerHeight * 0.9,
+          behavior: 'smooth'
         });
-      }, 100);
-    }
-
-    await Promise.all(
-      PROVIDERS.map(async (provider) => {
-        const result = await testProvider(provider, prompt, currentIdentity);
-        if (latestRequest.current === requestId) {
-          setResults((current) => ({ ...current, [provider.id]: result }));
-        }
-      }),
-    );
-
-  }
-
-  async function retryProvider(provider) {
-    const request = submittedRequest.current;
-    if (!request) return;
-    setResults((current) => ({
-      ...current,
-      [provider.id]: { status: "loading" },
-    }));
-    const result = await testProvider(
-      provider,
-      request.prompt,
-      request.personality,
-    );
-    if (latestRequest.current === request.requestId) {
-      setResults((current) => ({ ...current, [provider.id]: result }));
+      }, 600);      
     }
   }
 
+  function handleChange2(event) {
+    setCurrentInput(event.target.value);
+  }
+
+  // PERPLEXITY
+  useEffect(() => {
+    async function getOutput() {
+      
+      setOutputPerplexity(null);
+
+      const perplexityKey = import.meta.env.VITE_PERPLEXITY_KEY
+      // const perplexityKey = process.env.PERPLEXITY_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+
+        const client = new Perplexity({
+          apiKey: perplexityKey
+        });
+
+        const response = await client.responses.create({
+          effort: 'fast',
+          input: [
+            { 
+              type: 'message',
+              role: 'system',
+              content: personality
+            },
+            { 
+              type: 'message',
+              role: 'user',
+              content: input
+            },
+          ],
+        });
+        
+        const data = await response.json();
+        setOutputPerplexity(data.output_text || "Unable to generate results at this time.");
+      } catch (error) {
+        console.error("Perplexity API error:", error);
+        setOutputPerplexity("Error: Unable to generate response at this time.");
+      }
+    }
+    
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  
+  // OPENAI
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputOpenai(null);
+      
+      const openaiKey = import.meta.env.VITE_OPENAI_KEY;
+      // const openaiKey = process.env.OPENAI_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/responses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${openaiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-6-luna",
+            instructions: personality,
+            input: input
+          })
+        });
+
+        const data = await response.json();
+        console.log('Full response:', data);
+        
+        
+        // Find the message item in the output array (it's the one with type: "message")
+        const text = data.output[1].content.logprobs.text;
+    
+        console.log('Extracted text:', text);
+        setOutputOpenai(text);
+        
+      } catch (error) {
+        console.error("OpenAI API error:", error);
+        setOutputOpenai("Error: Unable to generate response at this time.");
+      }
+
+    }
+    
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  
+  // ANTHROPIC
+  useEffect(() => {
+    
+    async function getOutput() {
+
+      setOutputAnthropic(null);
+      
+      const anthropicKey = import.meta.env.VITE_ANTHROPIC_KEY
+      // const anthropicKey = process.env.ANTHROPIC_KEY;
+
+      const client = new Anthropic({
+        apiKey: anthropicKey,
+        dangerouslyAllowBrowser: true
+      });
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+      
+      try {
+        const message = await client.messages.create({
+          model: "claude-haiku-5-5",
+          max_tokens: 1024,
+          system: personality,
+          messages: [{ role: "user", content: input }],
+        });
+        
+        setOutputAnthropic(message.content);
+        
+      } catch (error) {
+         console.error("Error fetching from Anthropic:", error);
+      }
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input]);
+
+
+  // GEMINI
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputGemini(null);
+
+      const geminiKey = import.meta.env.VITE_GEMINI_KEY
+      // const geminiKey = process.env.GEMINI_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/interactions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: "gemini-3.8-flash",
+            input: input
+          })
+        });
+
+        const data = await response.json();
+
+        setOutputGemini(data.output_text || "Unable to generate results at this time.");
+        
+      } catch (error) {
+        console.error("Gemini API error:", error);
+        setOutputGemini("Error: Unable to generate response at this time.");
+      }
+
+    }
+    
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  /*
+  // Meta
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputMeta(null);
+
+      const metaKey = import.meta.env.VITE_META_KEY
+      // const openaiKey = process.env.META_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.llama-api.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${metaKey}`
+          },
+          body: JSON.stringify({
+            model: "llama3.2-3b",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputMeta(data.choices[0].message.content);
+      } catch (error) {
+        console.error("Meta API error:", error);
+        setOutputMeta("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+  */
+
+  /*
+  // MISTRAL
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputMistral(null);
+
+      const mistralKey = import.meta.env.VITE_MISTRAL_KEY
+      // const mistralKey = process.env.MISTRAL_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${mistralKey}`
+          },
+          body: JSON.stringify({
+            model: "mistral-small-latest",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputMistral(data.choices[0].message.content);
+      } catch (error) {
+        console.error("Mistral API error:", error);
+        setOutputMistral("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+  */
+
+  /*
+  // DEEP-SEEK
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputDeepseek(null);
+
+      const deepseekKey = import.meta.env.VITE_DEEPSEEK_KEY
+      // const mistralKey = process.env.DEEPSEEK_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${deepseekKey}`
+          },
+          body: JSON.stringify({
+            model: "deepseek-chat",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        setOutputDeepseek(data.choices[0].message.content);
+      } catch (error) {
+        console.error("DeepSeek API error:", error);
+        setOutputDeepseek("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+
+  */
+
+  
+  // GROK
+  useEffect(() => {
+    async function getOutput() {
+
+      setOutputX(null);
+
+      const xKey = import.meta.env.VITE_X_KEY
+      // const xKey = process.env.X_KEY;
+
+      let personality = '';
+      if (identity) {
+        personality = identity;
+      } else {
+        personality = "You are a kind, approachable, socially-savvy, highly intelligent, highly-educated, and wise AI assistant who provides encouraging/supportive, thoughtful/insightful, and helpful responses."
+      }
+
+      try {
+        const response = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${xKey}`
+          },
+          body: JSON.stringify({
+            model: "grok-4.3",
+            messages: [
+              {
+                role: "system",
+                content: personality
+              },
+              {
+                role: "user",
+                content: input,
+              }
+            ],
+            stream: false,
+            temperature: 0
+          })
+        });
+
+        const data = await response.json();
+        setOutputX(data.choices[0].message.content);
+      } catch (error) {
+        console.error("Grok API error:", error);
+        setOutputX("Error: Unable to generate response at this time.");
+      }
+
+    }
+
+    if (input) {
+      getOutput();
+    }
+
+  }, [input])
+  
+
+  
   return (
     <div className="App scroll">
-      <Container
-        className={`d-flex w-100 outer my-3 ${
-          responsive
-            ? "flex-column align-items-start"
-            : "justify-content-start"
-        }`}
-      >
-        <div
-          className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${
-            submittedPrompt && !responsive ? "special-width" : "col-lg-6"
-          }`}
-        >
-          <Nav />
-          <Input
-            currentIdentity={currentIdentity}
-            handleChange={(event) => setCurrentIdentity(event.target.value)}
-            currentInput={currentInput}
-            handleChange2={(event) => setCurrentInput(event.target.value)}
-            handleSubmit={handleSubmit}
-            submitting={Object.values(results ?? {}).some(
-              (result) => result.status === "loading",
-            )}
-          />
+      <Container className={`d-flex w-100 outer my-3 ${responsive === true ? 'd-flex flex-column align-items-start' : 'justify-content-start'}`}>
+        <div className={`container d-flex flex-column align-items-start bg-opacity-10 shadow-lg col-md-8 col-sm-10 my-3 px-0 ${input && responsive === false ? 'special-width' : 'col-lg-6'}`}>
+            <Nav />
+    
+            <Input
+              currentIdentity={currentIdentity}
+              handleChange={handleChange}
+              currentInput={currentInput}
+              handleChange2={handleChange2}
+              handleSubmit={handleSubmit}
+              input={input}
+            />
+  
         </div>
-        {results && (
+        { (outputPerplexity || outputOpenai || outputAnthropic || outputGemini || outputMistral) ? 
           <Results
-            results={results}
-            providers={PROVIDERS}
+            outputPerplexity={outputPerplexity}
+            outputOpenai={outputOpenai}
+            outputAnthropic={outputAnthropic}
+            outputGemini={outputGemini}
+            outputMeta= {outputMeta}
+            outputX={outputX}
             responsive={responsive}
-            prompt={submittedPrompt}
-            onRetry={retryProvider}
           />
-        )}
+          : null
+        }
       </Container>
+      
     </div>
   );
 }
